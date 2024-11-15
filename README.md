@@ -134,3 +134,7 @@ sequenceDiagram
         Client-->>User: 내역 표시
     end
 ```
+
+## ERD
+
+<img width="822" alt="image" src="https://github.com/user-attachments/assets/516727db-91f7-4e00-991f-259c9278587b">
