@@ -137,4 +137,5 @@ sequenceDiagram
 
 ## ERD
 
-<img width="822" alt="image" src="https://github.com/user-attachments/assets/516727db-91f7-4e00-991f-259c9278587b">
+<img width="729" alt="image" src="https://github.com/user-attachments/assets/2bde8a13-c1de-4f5b-a1d9-7b36731e012b">
+
