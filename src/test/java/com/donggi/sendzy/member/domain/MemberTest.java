@@ -112,11 +112,77 @@ public class MemberTest {
             }
         }
 
-        // 비밀번호가 포함되지 않으면 예외가 발생한다
-        // 비밀번호 길이가 32자를 넘어가면 예외가 발생한다
-        // 비밀번호 길이가 8자 미만이면 예외가 발생한다
-        // 비밀번호가 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상을 포함하지 않으면 예외가 발생한다
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 비밀번호가_포함되지_않으면 {
 
+            @Test
+            @DisplayName("예외가 발생한다")
+            void 예외가_발생한다() {
+                // given
+                final var email = "donggi@sendzy.com";
+                final var expected = new SignupRequest(email, null);
+
+                // when & then
+                assertThatThrownBy(() -> new Member(expected.getEmail(), expected.getPassword()))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessage("비밀번호는 필수입니다.");
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 비밀번호가_32자를_넘어가면 {
+
+            @Test
+            @DisplayName("예외가 발생한다")
+            void 예외가_발생한다() {
+                // given
+                final var email = "donggi@sendzy.com";
+                final var password = "a".repeat(33);
+
+                // when & then
+                assertThatThrownBy(() -> new Member(email, password))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessage("비밀번호는 32자를 넘을 수 없습니다.");
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 비밀번호가_8자_미만이면 {
+
+            @Test
+            @DisplayName("예외가 발생한다")
+            void 예외가_발생한다() {
+                // given
+                final var email = "donggi@sendzy.com";
+                final var password = "1234567";
+
+                // when & then
+                assertThatThrownBy(() -> new Member(email, password))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessage("비밀번호는 8자 이상이어야 합니다.");
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 비밀번호가_영문_대문자_영문_소문자_숫자_특수문자_중_3가지_이상을_포함하지_않으면 {
+
+            @Test
+            @DisplayName("예외가 발생한다")
+            void 예외가_발생한다() {
+                // given
+                final var email = "donggi@sendzy.com";
+                final var password = "password";
+
+                // when & then
+                assertThatThrownBy(() -> new Member(email, password))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessage("비밀번호는 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.");
+            }
+        }
     }
 }
 
@@ -173,6 +239,18 @@ class Member {
 
         if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("비밀번호는 필수입니다.");
+        }
+
+        if (password.length() > 32) {
+            throw new IllegalArgumentException("비밀번호는 32자를 넘을 수 없습니다.");
+        }
+
+        if (password.length() < 8) {
+            throw new IllegalArgumentException("비밀번호는 8자 이상이어야 합니다.");
+        }
+
+        if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$")) {
+            throw new IllegalArgumentException("비밀번호는 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.");
         }
     }
 }
