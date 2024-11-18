@@ -1,12 +1,11 @@
 package com.donggi.sendzy.member.domain;
 
+import com.donggi.sendzy.common.exception.ValidException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -49,8 +48,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(null, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("이메일은 필수입니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("email 은/는 null 또는 공백이 될 수 없습니다.");
             }
 
             @Test
@@ -62,8 +61,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("이메일은 100자를 넘을 수 없습니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("email 의 길이는 100 글자 이하여야 합니다.");
             }
 
             @Test
@@ -75,8 +74,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("이메일은 5자 이상이어야 합니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("email 의 길이는 5 글자 이상이어야 합니다.");
             }
 
             @Test
@@ -88,8 +87,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("이메일 형식이 아닙니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("email 은/는 유효한 이메일 형식 (예: user@example.com) 조건을 충족해야 합니다.");
             }
         }
 
@@ -105,8 +104,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, null))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("비밀번호는 필수입니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("password 은/는 null 또는 공백이 될 수 없습니다.");
             }
 
             @Test
@@ -118,8 +117,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("비밀번호는 32자를 넘을 수 없습니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("password 의 길이는 32 글자 이하여야 합니다.");
             }
 
             @Test
@@ -131,8 +130,8 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("비밀번호는 8자 이상이어야 합니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("password 의 길이는 8 글자 이상이어야 합니다.");
             }
 
             @Test
@@ -144,60 +143,10 @@ public class MemberTest {
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("비밀번호는 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.");
+                        .isInstanceOf(ValidException.class)
+                        .hasMessage("password 은/는 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상 포함 조건을 충족해야 합니다.");
             }
         }
     }
 
-}
-
-class Member {
-
-    private Long id;
-    private String email;
-    private String password;
-    private LocalDateTime createdAt;
-
-    public Member(final String email, final String password) {
-        validate(email, password);
-        this.id = 1L;
-        this.email = email;
-        this.password = password;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    private void validate(final String email, final String password) {
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("이메일은 필수입니다.");
-        }
-
-        if (email.length() > 100) {
-            throw new IllegalArgumentException("이메일은 100자를 넘을 수 없습니다.");
-        }
-
-        if (email.length() < 5) {
-            throw new IllegalArgumentException("이메일은 5자 이상이어야 합니다.");
-        }
-
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            throw new IllegalArgumentException("이메일 형식이 아닙니다.");
-        }
-
-        if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("비밀번호는 필수입니다.");
-        }
-
-        if (password.length() > 32) {
-            throw new IllegalArgumentException("비밀번호는 32자를 넘을 수 없습니다.");
-        }
-
-        if (password.length() < 8) {
-            throw new IllegalArgumentException("비밀번호는 8자 이상이어야 합니다.");
-        }
-
-        if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$")) {
-            throw new IllegalArgumentException("비밀번호는 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.");
-        }
-    }
 }
