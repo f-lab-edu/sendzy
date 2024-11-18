@@ -16,7 +16,7 @@ public class MemberTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 멤버_등록시 {
+    class 멤버_등록_시 {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -39,11 +39,11 @@ public class MemberTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 이메일이_포함되지_않으면 {
+        class 이메일이 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("포함되지 않으면 예외가 발생한다")
+            void 포함되지_않으면_예외가_발생한다() {
                 // given
                 final var password = "superpassword";
 
@@ -52,15 +52,10 @@ public class MemberTest {
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일은 필수입니다.");
             }
-        }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 이메일이_100자를_넘어가면 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("이메일이 100자를 넘어가면 예외가 발생한다")
+            void 이메일이_100자를_넘어가면_예외가_발생한다() {
                 // given
                 final var email = "a".repeat(101);
                 final var password = "superpassword";
@@ -70,15 +65,10 @@ public class MemberTest {
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일은 100자를 넘을 수 없습니다.");
             }
-        }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 이메일이_5자_미만이면 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("이메일이 5자 미만이면 예외가 발생한다")
+            void 이메일이_5자_미만이면_예외가_발생한다() {
                 // given
                 final var email = "a".repeat(4);
                 final var password = "superpassword";
@@ -88,15 +78,10 @@ public class MemberTest {
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일은 5자 이상이어야 합니다.");
             }
-        }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 이메일이_이메일_형식이_아니면 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("이메일이 이메일 형식이 아니면 예외가 발생한다")
+            void 이메일이_이메일_형식이_아니면_예외가_발생한다() {
                 // given
                 final var email = "donggi";
                 final var password = "superpassword";
@@ -110,11 +95,11 @@ public class MemberTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 비밀번호가_포함되지_않으면 {
+        class 비밀번호가 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("포함되지 않으면 예외가 발생한다")
+            void 포함되지_않으면_예외가_발생한다() {
                 // given
                 final var email = "donggi@sendzy.com";
 
@@ -123,15 +108,10 @@ public class MemberTest {
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("비밀번호는 필수입니다.");
             }
-        }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 비밀번호가_32자를_넘어가면 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("32자를 넘어가면 예외가 발생한다")
+            void _32자를_넘어가면_예외가_발생한다() {
                 // given
                 final var email = "donggi@sendzy.com";
                 final var password = "a".repeat(33);
@@ -141,15 +121,10 @@ public class MemberTest {
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("비밀번호는 32자를 넘을 수 없습니다.");
             }
-        }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 비밀번호가_8자_미만이면 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("8자 미만이면 예외가 발생한다")
+            void _8자_미만이면_예외가_발생한다() {
                 // given
                 final var email = "donggi@sendzy.com";
                 final var password = "1234567";
@@ -159,15 +134,10 @@ public class MemberTest {
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("비밀번호는 8자 이상이어야 합니다.");
             }
-        }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 비밀번호가_영문_대문자_영문_소문자_숫자_특수문자_중_3가지_이상을_포함하지_않으면 {
 
             @Test
-            @DisplayName("예외가 발생한다")
-            void 예외가_발생한다() {
+            @DisplayName("영문 대문자 영문 소문자 숫자 특수문자 중 3가지 이상을 포함하지 않으면 예외가 발생한다")
+            void 영문_대문자_영문_소문자_숫자_특수문자_중_3가지_이상을_포함하지_않으면_예외가_발생한다() {
                 // given
                 final var email = "donggi@sendzy.com";
                 final var password = "password";
