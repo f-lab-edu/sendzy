@@ -27,11 +27,10 @@ public class MemberTest {
             void 멤버가_생성된다() {
                 // given
                 final var email = "donggi@sendzy.com";
-                final var password = "superpassword";
-                final var expected = new SignupRequest(email, password);
+                final var password = "SuperPa2ssword!@#";
 
                 // when
-                final var actual = new Member(expected.getEmail(), expected.getPassword());
+                final var actual = new Member(email, password);
 
                 // then
                 assertThat(actual).isNotNull();
@@ -46,10 +45,10 @@ public class MemberTest {
             @DisplayName("예외가 발생한다")
             void 예외가_발생한다() {
                 // given
-                final SignupRequest expected = new SignupRequest(null, "password");
+                final var password = "superpassword";
 
                 // when & then
-                assertThatThrownBy(() -> new Member(expected.getEmail(), expected.getPassword()))
+                assertThatThrownBy(() -> new Member(null, password))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일은 필수입니다.");
             }
@@ -65,10 +64,9 @@ public class MemberTest {
                 // given
                 final var email = "a".repeat(101);
                 final var password = "superpassword";
-                final var expected = new SignupRequest(email, password);
 
                 // when & then
-                assertThatThrownBy(() -> new Member(expected.getEmail(), expected.getPassword()))
+                assertThatThrownBy(() -> new Member(email, password))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일은 100자를 넘을 수 없습니다.");
             }
@@ -84,10 +82,9 @@ public class MemberTest {
                 // given
                 final var email = "a".repeat(4);
                 final var password = "superpassword";
-                final var expected = new SignupRequest(email, password);
 
                 // when & then
-                assertThatThrownBy(() -> new Member(expected.getEmail(), expected.getPassword()))
+                assertThatThrownBy(() -> new Member(email, password))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일은 5자 이상이어야 합니다.");
             }
@@ -103,10 +100,9 @@ public class MemberTest {
                 // given
                 final var email = "donggi";
                 final var password = "superpassword";
-                final var expected = new SignupRequest(email, password);
 
                 // when & then
-                assertThatThrownBy(() -> new Member(expected.getEmail(), expected.getPassword()))
+                assertThatThrownBy(() -> new Member(email, password))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일 형식이 아닙니다.");
             }
@@ -121,10 +117,9 @@ public class MemberTest {
             void 예외가_발생한다() {
                 // given
                 final var email = "donggi@sendzy.com";
-                final var expected = new SignupRequest(email, null);
 
                 // when & then
-                assertThatThrownBy(() -> new Member(expected.getEmail(), expected.getPassword()))
+                assertThatThrownBy(() -> new Member(email, null))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("비밀번호는 필수입니다.");
             }
@@ -184,25 +179,7 @@ public class MemberTest {
             }
         }
     }
-}
 
-class SignupRequest {
-
-    private String email;
-    private String password;
-
-    public SignupRequest(final String email, final String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }
 
 class Member {
