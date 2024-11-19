@@ -1,15 +1,21 @@
 package com.donggi.sendzy.member.integration;
 
+import com.donggi.sendzy.member.domain.Member;
+import com.donggi.sendzy.member.domain.MemberRepository;
 import com.donggi.sendzy.member.dto.SignupRequest;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
+import static com.donggi.sendzy.member.TestUtils.DEFAULT_EMAIL;
+import static com.donggi.sendzy.member.TestUtils.DEFAULT_PASSWORD;
 import static io.restassured.RestAssured.given;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
@@ -19,6 +25,9 @@ public class SignupIntegrationTest {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     private static final String SIGNUP_URL = "/v1/signup";
 
@@ -31,11 +40,9 @@ public class SignupIntegrationTest {
             @Test
             void 회원을_등록한다() {
                 // given
-                final var email = "donggi@sendzy.com";
-                final var password = "PassWord123!@#";
-                final var expected = new SignupRequest(email, password);
+                final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_PASSWORD);
 
-                // when
+                // when & then
                 given()
                     .port(port)
                     .contentType(ContentType.JSON)
@@ -45,13 +52,56 @@ public class SignupIntegrationTest {
                 .then()
                     .statusCode(HttpStatus.OK.value());
             }
+        }
 
+        @Nested
+        class 이메일이_중복되면 {
+
+            @BeforeEach
+            void setUp() {
+                Member existingMember = new Member(DEFAULT_EMAIL, DEFAULT_PASSWORD);
+                memberRepository.save(existingMember);
+            }
+
+            @Test
+            void _409_Conflict를_반환한다() {
+                // given
+                final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_PASSWORD);
+
+                // when & then
+                given()
+                    .port(port)
+                    .contentType(ContentType.JSON)
+                    .body(expected)
+                .when()
+                    .post(SIGNUP_URL)
+                .then()
+                    .statusCode(HttpStatus.CONFLICT.value());
+            }
+        }
+
+        @Nested
+        class 이메일이_포함되지_않으면 {
+
+            @Test
+            void _400_Bad_Request를_반환한다() {
+            }
+        }
+
+        @Nested
+        class 비밀번호가_포함되지_않으면 {
+
+            @Test
+            void _400_Bad_Request를_반환한다() {
+            }
+        }
+
+        @Nested
+        class 비밀번호가_영문_대문자_영문_소문자_숫자_특수문자_중_3가지_이상을_포함하지_않으면 {
+
+            @Test
+            void _400_Bad_Request를_반환한다() {
+            }
         }
     }
-
-    // 회원 가입 요청이 정상적이면 회원을 등록한다
-    // 회원 가입 요청이 이메일이 중복되면 409 Conflict를 반환한다
-    // 회원 가입 요청이 이메일이 포함되지 않으면 400 Bad Request를 반환한다
-    // 회원 가입 요청이 비밀번호가 포함되지 않으면 400 Bad Request를 반환한다
-    // 회원 가입 요청이 비밀번호가 영문 대문자 영문 소문자 숫자 특수문자 중 3가지 이상을 포함하지 않으면 400 Bad Request를 반환한다
 }
