@@ -24,7 +24,9 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2")
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+	testImplementation 'io.rest-assured:rest-assured'
+	testImplementation 'io.rest-assured:json-path'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testRuntimeOnly 'com.h2database:h2'
 }
