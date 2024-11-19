@@ -14,7 +14,7 @@ public class ClientErrorControllerAdvice {
      */
     @ExceptionHandler(EmailDuplicatedException.class)
     public ProblemDetail handleEmailDuplicatedException(EmailDuplicatedException e) {
-        return ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
     }
 
     /**
@@ -22,6 +22,6 @@ public class ClientErrorControllerAdvice {
      */
     @ExceptionHandler(ValidException.class)
     public ProblemDetail handleValidException(ValidException e) {
-        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }

@@ -106,16 +106,16 @@ public class MemberTest {
             }
 
             @Test
-            @DisplayName("32자를 넘어가면 예외가 발생한다")
-            void _32자를_넘어가면_예외가_발생한다() {
+            @DisplayName("100자를 넘어가면 예외가 발생한다")
+            void _100자를_넘어가면_예외가_발생한다() {
                 // given
                 final var email = "donggi@sendzy.com";
-                final var password = "a".repeat(33);
+                final var password = "a".repeat(101);
 
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
                         .isInstanceOf(ValidException.class)
-                        .hasMessage("password 의 길이는 32 글자 이하여야 합니다.");
+                        .hasMessage("password 의 길이는 100 글자 이하여야 합니다.");
             }
 
             @Test

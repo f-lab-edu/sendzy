@@ -1,5 +1,6 @@
 package com.donggi.sendzy.member.domain;
 
+import com.donggi.sendzy.common.utils.RegexPattern;
 import com.donggi.sendzy.common.utils.Validator;
 
 import java.time.LocalDateTime;
@@ -8,8 +9,8 @@ public class Member {
 
     private static final int EMAIL_MAX_LENGTH = 100;
     private static final int EMAIL_MIN_LENGTH = 5;
-    public static final int PASSWORD_MAX_LENGTH = 32;
-    public static final int PASSWORD_MIN_LENGTH = 8;
+    public static final int ENCODED_PASSWORD_MAX_LENGTH = 100;
+    public static final int ENCODED_PASSWORD_MIN_LENGTH = 8;
 
     private Long id;
     private String email;
@@ -39,8 +40,8 @@ public class Member {
     private void validatePassword(final String password) {
         final var fieldName = "password";
         Validator.notBlank(password, fieldName);
-        Validator.maxLength(password, PASSWORD_MAX_LENGTH, fieldName);
-        Validator.minLength(password, PASSWORD_MIN_LENGTH, fieldName);
+        Validator.maxLength(password, ENCODED_PASSWORD_MAX_LENGTH, fieldName);
+        Validator.minLength(password, ENCODED_PASSWORD_MIN_LENGTH, fieldName);
         Validator.matchesRegex(password, RegexPattern.PASSWORD.getPattern(), RegexPattern.PASSWORD.getDescription(), fieldName);
     }
 
