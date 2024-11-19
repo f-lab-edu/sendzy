@@ -18,7 +18,6 @@ public class Member {
 
     public Member(final String email, final String password) {
         validate(email, password);
-        this.id = 1L;
         this.email = email;
         this.password = password;
         this.createdAt = LocalDateTime.now();
@@ -43,5 +42,9 @@ public class Member {
         Validator.maxLength(password, PASSWORD_MAX_LENGTH, fieldName);
         Validator.minLength(password, PASSWORD_MIN_LENGTH, fieldName);
         Validator.matchesRegex(password, RegexPattern.PASSWORD.getPattern(), RegexPattern.PASSWORD.getDescription(), fieldName);
+    }
+
+    public Long getId() {
+        return id;
     }
 }

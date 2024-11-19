@@ -1,1 +1,7 @@
-spring.application.name=sendzy
+spring.application.name: sendzy
+spring.profiles.active: local
+
+spring:
+  config:
+    import:
+      - db-core.yml

@@ -11,14 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class MemberTest {
 
     @Nested
-    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class 멤버_등록_시 {
 
         @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 요청이_정상적이면 {
 
             @Test
@@ -37,7 +36,6 @@ public class MemberTest {
         }
 
         @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 이메일이 {
 
             @Test
@@ -93,7 +91,6 @@ public class MemberTest {
         }
 
         @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 비밀번호가 {
 
             @Test
