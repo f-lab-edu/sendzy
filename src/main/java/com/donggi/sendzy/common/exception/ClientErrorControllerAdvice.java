@@ -16,4 +16,12 @@ public class ClientErrorControllerAdvice {
     public ProblemDetail handleEmailDuplicatedException(EmailDuplicatedException e) {
         return ProblemDetail.forStatus(HttpStatus.CONFLICT);
     }
+
+    /**
+     * 클라이언트가 입력한 값이 유효하지 않은 경우
+     */
+    @ExceptionHandler(ValidException.class)
+    public ProblemDetail handleValidException(ValidException e) {
+        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+    }
 }

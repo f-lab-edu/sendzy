@@ -31,6 +31,11 @@ public class SignupIntegrationTest {
 
     private static final String SIGNUP_URL = "/v1/signup";
 
+    @BeforeEach
+    void setUp() {
+        memberRepository.deleteAll();
+    }
+
     @Nested
     class 회원_가입_요청이 {
 
@@ -57,15 +62,10 @@ public class SignupIntegrationTest {
         @Nested
         class 이메일이_중복되면 {
 
-            @BeforeEach
-            void setUp() {
-                Member existingMember = new Member(DEFAULT_EMAIL, DEFAULT_PASSWORD);
-                memberRepository.save(existingMember);
-            }
-
             @Test
             void _409_Conflict를_반환한다() {
                 // given
+                memberRepository.save(new Member(DEFAULT_EMAIL, DEFAULT_PASSWORD));
                 final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_PASSWORD);
 
                 // when & then
@@ -85,6 +85,19 @@ public class SignupIntegrationTest {
 
             @Test
             void _400_Bad_Request를_반환한다() {
+                // given
+                final var expected = new SignupRequest(null, DEFAULT_PASSWORD);
+
+                // when & then
+                given()
+                    .port(port)
+                    .contentType(ContentType.JSON)
+                    .body(expected)
+                .when()
+                    .post(SIGNUP_URL)
+                .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+
             }
         }
 
@@ -93,6 +106,18 @@ public class SignupIntegrationTest {
 
             @Test
             void _400_Bad_Request를_반환한다() {
+                // given
+                final var expected = new SignupRequest(DEFAULT_EMAIL, null);
+
+                // when & then
+                given()
+                    .port(port)
+                    .contentType(ContentType.JSON)
+                    .body(expected)
+                .when()
+                    .post(SIGNUP_URL)
+                .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
             }
         }
 
@@ -101,6 +126,18 @@ public class SignupIntegrationTest {
 
             @Test
             void _400_Bad_Request를_반환한다() {
+                // given
+                final var expected = new SignupRequest(DEFAULT_EMAIL, "password");
+
+                // when & then
+                given()
+                    .port(port)
+                    .contentType(ContentType.JSON)
+                    .body(expected)
+                .when()
+                    .post(SIGNUP_URL)
+                .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
             }
         }
     }

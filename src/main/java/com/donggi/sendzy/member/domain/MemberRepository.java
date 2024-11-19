@@ -15,4 +15,9 @@ public interface MemberRepository {
      * @return 회원이 존재하면 true, 존재하지 않으면 false
      */
     boolean existsByEmail(String email);
+
+    /**
+     * 저장된 모든 회원을 삭제합니다.
+     */
+    void deleteAll();
 }
