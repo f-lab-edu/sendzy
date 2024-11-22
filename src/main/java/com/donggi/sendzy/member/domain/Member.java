@@ -2,9 +2,11 @@ package com.donggi.sendzy.member.domain;
 
 import com.donggi.sendzy.common.utils.RegexPattern;
 import com.donggi.sendzy.common.utils.Validator;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class Member {
 
     private static final int EMAIL_MAX_LENGTH = 100;
@@ -43,9 +45,5 @@ public class Member {
         Validator.maxLength(password, ENCODED_PASSWORD_MAX_LENGTH, fieldName);
         Validator.minLength(password, ENCODED_PASSWORD_MIN_LENGTH, fieldName);
         Validator.matchesRegex(password, RegexPattern.PASSWORD.getPattern(), RegexPattern.PASSWORD.getDescription(), fieldName);
-    }
-
-    public Long getId() {
-        return id;
     }
 }

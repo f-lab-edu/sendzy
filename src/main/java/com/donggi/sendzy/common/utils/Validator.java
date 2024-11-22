@@ -1,13 +1,12 @@
 package com.donggi.sendzy.common.utils;
 
 import com.donggi.sendzy.common.exception.ValidException;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public final class Validator {
-
-    private Validator() {
-    }
 
     public static void notBlank(final String input, final String fieldName) {
         if (input == null || input.isBlank()) {
