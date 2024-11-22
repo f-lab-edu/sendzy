@@ -1,5 +1,6 @@
 package com.donggi.sendzy.member.application;
 
+import com.donggi.sendzy.member.domain.Member;
 import com.donggi.sendzy.member.domain.MemberService;
 import com.donggi.sendzy.member.dto.SignupRequest;
 import com.donggi.sendzy.member.exception.EmailDuplicatedException;
@@ -21,6 +22,7 @@ public class SignupService {
             throw new EmailDuplicatedException("이미 가입된 이메일입니다.");
         }
 
-        memberService.save(request.email(), passwordEncoder.encode(request.password()));
+        final var member = new Member(request.email(), passwordEncoder.encode(request.password()));
+        memberService.save(member);
     }
 }

@@ -1,5 +1,6 @@
 package com.donggi.sendzy.member.application;
 
+import com.donggi.sendzy.member.domain.Member;
 import com.donggi.sendzy.member.domain.MemberService;
 import com.donggi.sendzy.member.dto.SignupRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.donggi.sendzy.member.TestUtils.DEFAULT_EMAIL;
 import static com.donggi.sendzy.member.TestUtils.DEFAULT_PASSWORD;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,7 +41,7 @@ public class SignupServiceTest {
         // given
         final var email = DEFAULT_EMAIL;
         final var rawPassword = DEFAULT_PASSWORD;
-        final var encodedPassword = "encrypted_password";
+        final var encodedPassword = "sdlkfnsdlknflsdkanf#5314slkdnfDDs";
         final var request = new SignupRequest(email, rawPassword);
 
         when(memberService.existsByEmail(email)).thenReturn(false);
@@ -50,6 +52,6 @@ public class SignupServiceTest {
 
         // then
         verify(passwordEncoder).encode(rawPassword);
-        verify(memberService).save(email, encodedPassword);
+        verify(memberService).save(any(Member.class));
     }
 }

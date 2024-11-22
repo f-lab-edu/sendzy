@@ -9,11 +9,11 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public void save(final String email, final String password) {
-        memberRepository.save(new Member(email, password));
+    public void save(final Member member) {
+        memberRepository.save(member);
     }
 
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(final String email) {
         return memberRepository.existsByEmail(email);
     }
 }
