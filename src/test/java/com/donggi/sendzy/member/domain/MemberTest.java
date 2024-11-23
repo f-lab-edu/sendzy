@@ -102,7 +102,7 @@ public class MemberTest {
                 // when & then
                 assertThatThrownBy(() -> new Member(email, null))
                         .isInstanceOf(ValidException.class)
-                        .hasMessage("password 은/는 null 또는 공백이 될 수 없습니다.");
+                        .hasMessage("encryptedPassword 은/는 null 또는 공백이 될 수 없습니다.");
             }
 
             @Test
@@ -115,7 +115,7 @@ public class MemberTest {
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
                         .isInstanceOf(ValidException.class)
-                        .hasMessage("password 의 길이는 100 글자 이하여야 합니다.");
+                        .hasMessage("encryptedPassword 의 길이는 100 글자 이하여야 합니다.");
             }
 
             @Test
@@ -128,20 +128,7 @@ public class MemberTest {
                 // when & then
                 assertThatThrownBy(() -> new Member(email, password))
                         .isInstanceOf(ValidException.class)
-                        .hasMessage("password 의 길이는 8 글자 이상이어야 합니다.");
-            }
-
-            @Test
-            @DisplayName("영문 대문자 영문 소문자 숫자 특수문자 중 3가지 이상을 포함하지 않으면 예외가 발생한다")
-            void 영문_대문자_영문_소문자_숫자_특수문자_중_3가지_이상을_포함하지_않으면_예외가_발생한다() {
-                // given
-                final var email = "donggi@sendzy.com";
-                final var password = "password";
-
-                // when & then
-                assertThatThrownBy(() -> new Member(email, password))
-                        .isInstanceOf(ValidException.class)
-                        .hasMessage("password 은/는 영문 대문자, 영문 소문자, 숫자, 특수문자 중 3가지 이상 포함 조건을 충족해야 합니다.");
+                        .hasMessage("encryptedPassword 의 길이는 8 글자 이상이어야 합니다.");
             }
         }
     }

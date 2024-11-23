@@ -4,8 +4,8 @@
 <mapper namespace="com.donggi.sendzy.member.infrastructure.MemberMapper">
 
     <insert id="save" parameterType="com.donggi.sendzy.member.domain.Member">
-        INSERT INTO member (email, password, created_at)
-        VALUES (#{email}, #{password}, #{createdAt})
+        INSERT INTO member (email, encrypted_password, created_at)
+        VALUES (#{email}, #{encryptedPassword}, #{createdAt})
     </insert>
 
     <select id="existsByEmail" parameterType="string" resultType="boolean">

@@ -10,23 +10,23 @@ import java.time.LocalDateTime;
 public class Member {
 
     private static final Length EMAIL_LENGTH = Length.builder().min(5).max(100).build();
-    private static final Length PASSWORD_LENGTH = Length.builder().min(8).max(100).build();
+    private static final Length ENCRYPTED_PASSWORD_LENGTH = Length.builder().min(8).max(100).build();
 
     private Long id;
     private String email;
-    private String password;
+    private String encryptedPassword;
     private LocalDateTime createdAt;
 
-    public Member(final String email, final String password) {
-        validate(email, password);
+    public Member(final String email, final String encryptedPassword) {
+        validate(email, encryptedPassword);
         this.email = email;
-        this.password = password;
+        this.encryptedPassword = encryptedPassword;
         this.createdAt = LocalDateTime.now();
     }
 
     private void validate(final String email, final String password) {
         validateEmail(email);
-        validatePassword(password);
+        validateEncryptedPassword(password);
     }
 
     private void validateEmail(final String email) {
@@ -37,11 +37,10 @@ public class Member {
         Validator.matchesRegex(email, RegexPattern.EMAIL.getPattern(), RegexPattern.EMAIL.getDescription(), fieldName);
     }
 
-    private void validatePassword(final String password) {
-        final var fieldName = "password";
-        Validator.notBlank(password, fieldName);
-        Validator.maxLength(password, PASSWORD_LENGTH.getMax(), fieldName);
-        Validator.minLength(password, PASSWORD_LENGTH.getMin(), fieldName);
-        Validator.matchesRegex(password, RegexPattern.PASSWORD.getPattern(), RegexPattern.PASSWORD.getDescription(), fieldName);
+    private void validateEncryptedPassword(final String encryptedPassword) {
+        final var fieldName = "encryptedPassword";
+        Validator.notBlank(encryptedPassword, fieldName);
+        Validator.maxLength(encryptedPassword, ENCRYPTED_PASSWORD_LENGTH.getMax(), fieldName);
+        Validator.minLength(encryptedPassword, ENCRYPTED_PASSWORD_LENGTH.getMin(), fieldName);
     }
 }

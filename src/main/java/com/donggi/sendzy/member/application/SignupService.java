@@ -26,7 +26,7 @@ public class SignupService {
             throw new EmailDuplicatedException("이미 가입된 이메일입니다.");
         }
 
-        final var member = new Member(request.email(), passwordEncoder.encode(request.password()));
+        final var member = new Member(request.email(), passwordEncoder.encode(request.plainPassword()));
         memberService.save(member);
     }
 }
