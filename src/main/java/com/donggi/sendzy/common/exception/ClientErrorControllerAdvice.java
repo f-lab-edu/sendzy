@@ -6,9 +6,17 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * @RestControllerAdvice 는 @ControllerAdvice 와 @ResponseBody 가 합쳐진 어노테이션입니다.
+ * @ControllerAdvice 는 컨트롤러에서 발생하는 예외를 전역적으로 처리하는 클래스에 붙이는 어노테이션입니다.
+ * @ResponseBody 는 메서드의 반환값을 HTTP 응답 바디에 직접 넣어주는 어노테이션입니다.
+ */
 @RestControllerAdvice
 public class ClientErrorControllerAdvice {
 
+    /**
+     * @ExceptionHandler 는 특정 예외가 발생했을 때 처리할 메서드를 지정하는 어노테이션입니다.
+     */
     /**
      * 클라이언트가 입력한 이메일이 이미 존재하는 경우
      */

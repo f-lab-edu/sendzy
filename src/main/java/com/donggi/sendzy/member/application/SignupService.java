@@ -9,6 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @Service 는 내부적으로 @Component 를 포함하고 있어 해당 클래스를 컴포넌트 스캔 대상으로 등록합니다.
+ * 또한 해당 클래스가 비즈니스 로직을 담당하는 클래스임을 명시합니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class SignupService {
