@@ -5,3 +5,6 @@ spring:
   config:
     import:
       - db-core.yml
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
