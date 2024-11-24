@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.donggi.sendzy.member.TestUtils.DEFAULT_EMAIL;
-import static com.donggi.sendzy.member.TestUtils.DEFAULT_PASSWORD;
+import static com.donggi.sendzy.member.TestUtils.DEFAULT_RAW_PASSWORD;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,7 +40,7 @@ public class SignupServiceTest {
     void 비밀번호가_암호화된_상태로_저장된다() {
         // given
         final var email = DEFAULT_EMAIL;
-        final var rawPassword = DEFAULT_PASSWORD;
+        final var rawPassword = DEFAULT_RAW_PASSWORD;
         final var encodedPassword = "sdlkfnsdlknflsdkanf#5314slkdnfDDs";
         final var request = new SignupRequest(email, rawPassword);
 

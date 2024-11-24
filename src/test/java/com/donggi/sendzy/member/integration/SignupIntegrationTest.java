@@ -14,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import static com.donggi.sendzy.member.TestUtils.DEFAULT_EMAIL;
-import static com.donggi.sendzy.member.TestUtils.DEFAULT_PASSWORD;
+import static com.donggi.sendzy.member.TestUtils.*;
 import static io.restassured.RestAssured.given;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
@@ -45,7 +44,7 @@ public class SignupIntegrationTest {
             @Test
             void 회원을_등록한다() {
                 // given
-                final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_PASSWORD);
+                final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_RAW_PASSWORD);
 
                 // when & then
                 given()
@@ -65,8 +64,8 @@ public class SignupIntegrationTest {
             @Test
             void _409_Conflict를_반환한다() {
                 // given
-                memberRepository.save(new Member(DEFAULT_EMAIL, DEFAULT_PASSWORD));
-                final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_PASSWORD);
+                memberRepository.save(new Member(DEFAULT_EMAIL, DEFAULT_ENCODED_PASSWORD));
+                final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_RAW_PASSWORD);
 
                 // when & then
                 given()
