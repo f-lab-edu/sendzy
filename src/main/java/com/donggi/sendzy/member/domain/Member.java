@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 public class Member {
 
-    private static final Length EMAIL_LENGTH = new Length(5, 100);
-    private static final Length ENCODED_PASSWORD_LENGTH = new Length(8, 100);
+    private static final Length EMAIL_LENGTH = new Length(5, 300);
+    private static final Length ENCODED_PASSWORD_LENGTH = new Length(60, 300);
 
     private Long id;
     private String email;

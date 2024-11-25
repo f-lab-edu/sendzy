@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.donggi.sendzy.member.TestUtils.DEFAULT_EMAIL;
 import static com.donggi.sendzy.member.TestUtils.DEFAULT_RAW_PASSWORD;
+import static com.donggi.sendzy.member.TestUtils.DEFAULT_ENCODED_PASSWORD;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,7 +42,7 @@ public class SignupServiceTest {
         // given
         final var email = DEFAULT_EMAIL;
         final var rawPassword = DEFAULT_RAW_PASSWORD;
-        final var encodedPassword = "sdlkfnsdlknflsdkanf#5314slkdnfDDs";
+        final var encodedPassword = DEFAULT_ENCODED_PASSWORD;
         final var request = new SignupRequest(email, rawPassword);
 
         when(memberService.existsByEmail(email)).thenReturn(false);
