@@ -30,7 +30,7 @@ public class MemberRepositoryTest {
         final var password = TestUtils.DEFAULT_ENCODED_PASSWORD;
 
         // when
-        final var actual = memberRepository.save(new Member(email, password));
+        final var actual = memberRepository.create(new Member(email, password));
 
         // then
         assertThat(actual).isEqualTo(1L);

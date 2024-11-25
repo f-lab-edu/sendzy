@@ -3,7 +3,7 @@
 
 <mapper namespace="com.donggi.sendzy.member.infrastructure.MemberMapper">
 
-    <insert id="save" parameterType="com.donggi.sendzy.member.domain.Member">
+    <insert id="create" parameterType="com.donggi.sendzy.member.domain.Member">
         INSERT INTO member (email, encoded_password, created_at)
         VALUES (#{email}, #{encodedPassword}, #{createdAt})
     </insert>

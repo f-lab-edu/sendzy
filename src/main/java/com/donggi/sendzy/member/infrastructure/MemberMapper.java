@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper extends MemberRepository {
 
-    int save(Member member);
+    int create(Member member);
 
     boolean existsByEmail(String email);
 

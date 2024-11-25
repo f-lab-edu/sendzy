@@ -7,7 +7,7 @@ public interface MemberRepository {
      * @param member 저장할 회원
      * @return 저장된 행의 수
      */
-    int save(Member member);
+    int create(Member member);
 
     /**
      * 이메일로 회원이 존재하는지 확인합니다.

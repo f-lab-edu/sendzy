@@ -27,6 +27,6 @@ public class SignupService {
         }
 
         final var member = new Member(request.email(), passwordEncoder.encode(request.rawPassword()));
-        memberService.save(member);
+        memberService.create(member);
     }
 }

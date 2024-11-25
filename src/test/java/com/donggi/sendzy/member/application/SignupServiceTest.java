@@ -53,6 +53,6 @@ public class SignupServiceTest {
 
         // then
         verify(passwordEncoder).encode(rawPassword);
-        verify(memberService).save(any(Member.class));
+        verify(memberService).create(any(Member.class));
     }
 }

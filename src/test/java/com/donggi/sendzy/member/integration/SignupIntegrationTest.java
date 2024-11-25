@@ -64,7 +64,7 @@ public class SignupIntegrationTest {
             @Test
             void _409_Conflict를_반환한다() {
                 // given
-                memberRepository.save(new Member(DEFAULT_EMAIL, DEFAULT_ENCODED_PASSWORD));
+                memberRepository.create(new Member(DEFAULT_EMAIL, DEFAULT_ENCODED_PASSWORD));
                 final var expected = new SignupRequest(DEFAULT_EMAIL, DEFAULT_RAW_PASSWORD);
 
                 // when & then

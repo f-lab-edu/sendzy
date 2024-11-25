@@ -9,8 +9,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public void save(final Member member) {
-        memberRepository.save(member);
+    public void create(final Member member) {
+        memberRepository.create(member);
     }
 
     public boolean existsByEmail(final String email) {
