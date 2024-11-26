@@ -12,6 +12,10 @@
         SELECT EXISTS (SELECT 1 FROM member WHERE email = #{email})
     </select>
 
+    <select id="findByEmail" parameterType="string" resultType="com.donggi.sendzy.member.domain.Member">
+        SELECT id, email, encoded_password, created_at FROM member WHERE email = #{email}
+    </select>
+
     <delete id="deleteAll">
         DELETE FROM member
     </delete>
