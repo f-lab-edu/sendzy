@@ -4,15 +4,14 @@ import com.donggi.sendzy.common.utils.RegexPattern;
 import com.donggi.sendzy.common.utils.Validator;
 import com.donggi.sendzy.member.domain.Length;
 
-public record SignupRequest(
+public record LoginRequest(
     String email,
     String rawPassword
 ) {
-
     private static final Length EMAIL_LENGTH = new Length(5, 300);
     private static final Length RAW_PASSWORD_LENGTH = new Length(5, 32);
 
-    public SignupRequest {
+    public LoginRequest {
         validate(email, rawPassword);
     }
 

@@ -1,5 +1,6 @@
 package com.donggi.sendzy.member.domain;
 
+import com.donggi.sendzy.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +16,10 @@ public class MemberService {
 
     public boolean existsByEmail(final String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    public Member findByEmail(final String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberNotFoundException("요청한 회원 정보를 찾을 수 없습니다." + email));
     }
 }
