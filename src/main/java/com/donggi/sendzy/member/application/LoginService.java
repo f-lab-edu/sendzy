@@ -16,13 +16,11 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String login(final LoginRequest request) {
+    public void login(final LoginRequest request) {
         final var member = memberService.findByEmail(request.email());
 
         if (!passwordEncoder.matches(request.rawPassword(), member.getEncodedPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
         }
-
-        return "로그인 성공";
     }
 }

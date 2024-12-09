@@ -2,9 +2,11 @@ package com.donggi.sendzy.member.integration;
 
 import com.donggi.sendzy.member.TestUtils;
 import com.donggi.sendzy.member.application.SignupService;
+import com.donggi.sendzy.member.domain.MemberRepository;
 import com.donggi.sendzy.member.dto.LoginRequest;
 import com.donggi.sendzy.member.dto.SignupRequest;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
@@ -27,7 +29,15 @@ public class LoginIntegrationTest {
     @Autowired
     private SignupService signupService;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     private static final String LOGIN_URL = "/v1/login";
+
+    @BeforeEach
+    void setUp() {
+        memberRepository.deleteAll();
+    }
 
     @Nested
     class 로그인_요청이 {
@@ -36,7 +46,7 @@ public class LoginIntegrationTest {
         class 정상적이면 {
 
             @Test
-            void _200() {
+            void _200_상태_코드를_응답한다() {
                 // given
                 signupService.signup(new SignupRequest(TestUtils.DEFAULT_EMAIL, TestUtils.DEFAULT_RAW_PASSWORD));
                 var expected = new LoginRequest(TestUtils.DEFAULT_EMAIL, TestUtils.DEFAULT_RAW_PASSWORD);

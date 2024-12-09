@@ -16,7 +16,7 @@ public class LoginRestController {
     private final LoginService loginService;
 
     @PostMapping
-    public String login(@RequestBody LoginRequest request) {
-        return loginService.login(request);
+    public void login(@RequestBody LoginRequest request) {
+        loginService.login(request);
     }
 }
