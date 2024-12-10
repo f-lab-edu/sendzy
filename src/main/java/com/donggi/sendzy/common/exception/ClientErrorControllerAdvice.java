@@ -1,6 +1,8 @@
 package com.donggi.sendzy.common.exception;
 
 import com.donggi.sendzy.member.exception.EmailDuplicatedException;
+import com.donggi.sendzy.member.exception.InvalidPasswordException;
+import com.donggi.sendzy.member.exception.MemberNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,5 +33,21 @@ public class ClientErrorControllerAdvice {
     @ExceptionHandler(ValidException.class)
     public ProblemDetail handleValidException(ValidException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
+     * 클라이언트가 입력한 비밀번호가 유효하지 않은 경우
+     */
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ProblemDetail handleInvalidPasswordException(InvalidPasswordException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
+     * 클라이언트가 요청한 회원이 존재하지 않는 경우
+     */
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ProblemDetail handleMemberNotFoundException(MemberNotFoundException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
     }
 }

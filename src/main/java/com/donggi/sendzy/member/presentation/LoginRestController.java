@@ -1,7 +1,8 @@
 package com.donggi.sendzy.member.presentation;
 
-import com.donggi.sendzy.member.application.LoginService;
+import com.donggi.sendzy.member.application.AuthService;
 import com.donggi.sendzy.member.dto.LoginRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoginRestController {
 
-    private final LoginService loginService;
+    private final AuthService authService;
 
     @PostMapping
-    public void login(@RequestBody LoginRequest request) {
-        loginService.login(request);
+    public void login(@RequestBody final LoginRequest request, final HttpSession session) {
+        authService.authenticate(request, session);
     }
 }
