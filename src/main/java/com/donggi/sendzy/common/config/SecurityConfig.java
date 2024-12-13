@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            final var member = memberService.findByEmail(username);
+            final var member = memberService.findByEmailOrThrow(username);
             return new CustomUserDetails(member);
         };
     }
