@@ -2,7 +2,6 @@ package com.donggi.sendzy.member.application;
 
 import com.donggi.sendzy.member.dto.LoginRequest;
 import com.donggi.sendzy.member.exception.InvalidPasswordException;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,7 +15,7 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
 
-    public void authenticate(final LoginRequest loginRequest, final HttpSession session) {
+    public void authenticate(final LoginRequest loginRequest) {
         try {
             final var authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.rawPassword()));

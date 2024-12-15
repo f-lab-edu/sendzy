@@ -17,7 +17,10 @@ public class LoginRestController {
     private final AuthService authService;
 
     @PostMapping
-    public void login(@RequestBody final LoginRequest request, final HttpSession session) {
-        authService.authenticate(request, session);
+    public void login(
+        @RequestBody final LoginRequest request,
+        final HttpSession httpSession
+    ) {
+        authService.authenticate(request);
     }
 }
