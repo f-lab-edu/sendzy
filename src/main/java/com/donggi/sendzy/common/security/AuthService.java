@@ -1,4 +1,4 @@
-package com.donggi.sendzy.member.application;
+package com.donggi.sendzy.common.security;
 
 import com.donggi.sendzy.member.dto.LoginRequest;
 import com.donggi.sendzy.member.exception.InvalidPasswordException;

@@ -59,7 +59,9 @@ public class LoginIntegrationTest {
                 .when()
                     .post(LOGIN_URL)
                 .then()
-                    .statusCode(HttpStatus.OK.value());
+                    .statusCode(HttpStatus.OK.value())
+                    .cookie("JSESSIONID")
+                ;
             }
         }
 
