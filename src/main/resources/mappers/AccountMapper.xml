@@ -8,7 +8,7 @@
         VALUES (#{memberId}, #{balance})
     </insert>
 
-    <select id="findByMemberId" parameterType="string" resultType="com.donggi.sendzy.account.domain.Account">
+    <select id="findByMemberId" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
         SELECT id, member_id, balance FROM account WHERE member_id = #{memberId}
     </select>
 

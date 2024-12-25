@@ -8,5 +8,5 @@ CREATE TABLE member (
 CREATE TABLE account (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id BIGINT NOT NULL,
-    balance BIGINT NOT NULL,
+    balance BIGINT NOT NULL
 );
