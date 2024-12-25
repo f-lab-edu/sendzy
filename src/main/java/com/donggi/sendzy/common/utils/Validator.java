@@ -14,6 +14,12 @@ public final class Validator {
         }
     }
 
+    public static void notNull(Object object, String fieldName) {
+        if (object == null) {
+            throw new ValidException("%s 은/는 null이 될 수 없습니다.".formatted(fieldName));
+        }
+    }
+
     public static void maxLength(final CharSequence input, final int maxLength, final String fieldName) {
         if (maxLength <= 0) {
             throw new ValidException("최대 길이는 0 이하일 수 없습니다.");
@@ -50,6 +56,12 @@ public final class Validator {
 
     public static void notNegative(final BigDecimal value, final String fieldName) {
         if (value.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValidException(fieldName + " 은/는 음수가 될 수 없습니다.");
+        }
+    }
+
+    public static void notNegative(final long value, final String fieldName) {
+        if (value < 0) {
             throw new ValidException(fieldName + " 은/는 음수가 될 수 없습니다.");
         }
     }
