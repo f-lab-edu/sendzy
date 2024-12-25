@@ -32,7 +32,7 @@ public class SignupService {
         }
 
         final var member = new Member(request.email(), passwordEncoder.encode(request.rawPassword()));
-        memberService.create(member);
-        accountService.create(new Account(1L, INITIAL_ACCOUNT_BALANCE));
+        final var createdMemberId = memberService.create(member);
+        accountService.create(new Account(createdMemberId, INITIAL_ACCOUNT_BALANCE));
     }
 }

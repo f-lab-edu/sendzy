@@ -5,9 +5,9 @@ public interface AccountRepository {
     /**
      * 계좌를 생성합니다.
      * @param account 생성할 계좌
-     * @return 생성된 행의 수
+     * @return 생성된 계좌의 ID
      */
-    int create(Account account);
+    Long create(Account account);
 
     /**
      * 회원 ID로 계좌를 조회합니다.

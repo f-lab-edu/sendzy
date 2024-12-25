@@ -9,7 +9,7 @@ import java.util.Optional;
 @Mapper
 public interface MemberMapper extends MemberRepository {
 
-    int create(Member member);
+    Long create(Member member);
 
     boolean existsByEmail(String email);
 

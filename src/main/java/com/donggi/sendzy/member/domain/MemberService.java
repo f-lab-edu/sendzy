@@ -10,8 +10,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public void create(final Member member) {
-        memberRepository.create(member);
+    public Long create(final Member member) {
+        return memberRepository.create(member);
     }
 
     public boolean existsByEmail(final String email) {

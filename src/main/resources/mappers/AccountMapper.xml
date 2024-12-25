@@ -3,7 +3,7 @@
 
 <mapper namespace="com.donggi.sendzy.account.infrastructure.AccountMapper">
 
-    <insert id="create" parameterType="com.donggi.sendzy.account.domain.Account">
+    <insert id="create" parameterType="com.donggi.sendzy.account.domain.Account" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO account (member_id, balance)
         VALUES (#{memberId}, #{balance})
     </insert>
