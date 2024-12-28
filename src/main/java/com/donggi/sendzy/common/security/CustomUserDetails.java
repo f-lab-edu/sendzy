@@ -1,4 +1,4 @@
-package com.donggi.sendzy.common.config;
+package com.donggi.sendzy.common.security;
 
 import com.donggi.sendzy.member.domain.Member;
 import lombok.RequiredArgsConstructor;
