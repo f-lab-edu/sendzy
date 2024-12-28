@@ -1,5 +1,7 @@
 package com.donggi.sendzy.account.domain;
 
+import java.util.Optional;
+
 public interface AccountRepository {
 
     /**
@@ -14,7 +16,7 @@ public interface AccountRepository {
      * @param memberId 회원 ID
      * @return 조회된 계좌
      */
-    Account findByMemberId(Long memberId);
+    Optional<Account> findByMemberId(Long memberId);
 
     /**
      * 저장된 모든 계좌를 삭제합니다.

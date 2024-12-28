@@ -20,7 +20,7 @@ public class AccountRestController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/balance")
     public AccountBalanceResponse getBalance(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        final var balance = accountService.findByMemberId(userDetails.getMemberId()).getBalance();
+        final var balance = accountService.getByMemberId(userDetails.getMemberId()).getBalance();
         return new AccountBalanceResponse(balance);
     }
 }

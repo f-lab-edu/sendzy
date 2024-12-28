@@ -4,11 +4,13 @@ import com.donggi.sendzy.account.domain.Account;
 import com.donggi.sendzy.account.domain.AccountRepository;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Optional;
+
 @Mapper
 public interface AccountMapper extends AccountRepository {
     Long create(Account account);
 
-    Account findByMemberId(Long memberId);
+    Optional<Account> findByMemberId(Long memberId);
 
     void deleteAll();
 }
