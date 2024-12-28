@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
@@ -20,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Configuration 은 내부적으로 @Component 를 포함하고 있어 컴포넌트 스캔 대상이 됩니다.
  * 이를 통해 스프링 컨테이너에게 해당 클래스가 Bean 구성 클래스임을 알려줍니다.
  */
+@EnableMethodSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -41,7 +43,6 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession)
-                .maximumSessions(1)
             );
 
         return http.build();
