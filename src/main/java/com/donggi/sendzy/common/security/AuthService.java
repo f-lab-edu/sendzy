@@ -1,6 +1,5 @@
 package com.donggi.sendzy.common.security;
 
-import com.donggi.sendzy.member.dto.LoginRequest;
 import com.donggi.sendzy.member.exception.InvalidPasswordException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,10 +14,10 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
 
-    public void authenticate(final LoginRequest loginRequest) {
+    public void authenticate(final String email, final String rawPassword) {
         try {
             final var authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.rawPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(email, rawPassword));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (BadCredentialsException e) {
