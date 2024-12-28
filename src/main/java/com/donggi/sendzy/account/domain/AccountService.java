@@ -11,11 +11,6 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    @Transactional
-    public void create(final Account account) {
-        accountRepository.create(account);
-    }
-
     @Transactional(readOnly = true)
     public Account getByMemberId(final Long memberId) {
         return accountRepository.findByMemberId(memberId)

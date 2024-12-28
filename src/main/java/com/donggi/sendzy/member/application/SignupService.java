@@ -1,7 +1,7 @@
 package com.donggi.sendzy.member.application;
 
 import com.donggi.sendzy.account.domain.Account;
-import com.donggi.sendzy.account.domain.AccountService;
+import com.donggi.sendzy.account.domain.AccountRepository;
 import com.donggi.sendzy.member.domain.Member;
 import com.donggi.sendzy.member.domain.MemberService;
 import com.donggi.sendzy.member.dto.SignupRequest;
@@ -22,8 +22,8 @@ public class SignupService {
     public static final long INITIAL_ACCOUNT_BALANCE = 100000L;
 
     private final MemberService memberService;
-    private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
 
     @Transactional
     public void signup(final SignupRequest request) {
@@ -33,6 +33,6 @@ public class SignupService {
 
         final var member = new Member(request.email(), passwordEncoder.encode(request.rawPassword()));
         final var createdMemberId = memberService.create(member);
-        accountService.create(new Account(createdMemberId, INITIAL_ACCOUNT_BALANCE));
+        accountRepository.create(new Account(createdMemberId, INITIAL_ACCOUNT_BALANCE));
     }
 }
