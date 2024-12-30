@@ -1,8 +1,14 @@
 CREATE TABLE IF NOT EXISTS member (
   `id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `email` varchar(300) NOT NULL UNIQUE,
-  `password` varchar(300) NOT NULL,
+  `encoded_password` varchar(300) NOT NULL,
   `created_at` datetime NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS account (
+ `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+ `member_id` BIGINT NOT NULL,
+ `balance` BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS remittance_history (
