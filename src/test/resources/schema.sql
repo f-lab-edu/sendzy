@@ -10,3 +10,5 @@ CREATE TABLE account (
     member_id BIGINT NOT NULL,
     balance BIGINT NOT NULL
 );
+
+CREATE INDEX idx_member_id ON account (member_id);

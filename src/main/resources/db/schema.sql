@@ -37,6 +37,12 @@ CREATE TABLE IF NOT EXISTS remittance_status_history (
   `accepted_at` datetime
 );
 
+CREATE TABLE IF NOT EXISTS account (
+   `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+   `member_id` BIGINT NOT NULL,
+   `balance` BIGINT NOT NULL
+);
+
 ALTER TABLE remittance_request ADD CONSTRAINT remittance_request_receiver_id_fk FOREIGN KEY (receiver_id) REFERENCES member (id);
 ALTER TABLE remittance_request ADD CONSTRAINT remittance_request_sender_id_fk FOREIGN KEY (sender_id) REFERENCES member (id);
 
@@ -47,3 +53,4 @@ CREATE INDEX idx_remittance_request_receiver_id ON remittance_request (receiver_
 CREATE INDEX idx_remittance_status_history_request_id ON remittance_status_history (request_id);
 CREATE INDEX idx_remittance_status_history_sender_id ON remittance_status_history (sender_id);
 CREATE INDEX idx_remittance_status_history_receiver_id ON remittance_status_history (receiver_id);
+CREATE INDEX idx_member_id ON account (member_id);
