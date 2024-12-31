@@ -23,40 +23,24 @@ public class AccountTest {
             void 계좌가_생성된다() {
                 // given
                 final var memberId = 1L;
-                final var balance = 1000L;
 
                 // when
-                final var actual = new Account(memberId, balance);
+                final var actual = new Account(memberId);
 
                 // then
                 assertThat(actual).isNotNull();
             }
-        }
-
-        @Nested
-        class 계좌_잔액이 {
 
             @Test
-            void 포함되지_않으면_예외가_발생한다() {
+            void 초기_잔액은_0이다() {
                 // given
                 final var memberId = 1L;
 
-                // when & then
-                assertThatThrownBy(() -> new Account(memberId, null))
-                        .isInstanceOf(ValidException.class)
-                        .hasMessage("balance 은/는 null이 될 수 없습니다.");
-            }
+                // when
+                final var actual = new Account(memberId);
 
-            @Test
-            void 음수가_되면_예외가_발생한다() {
-                // given
-                final var memberId = 1L;
-                final var balance = -1L;
-
-                // when & then
-                assertThatThrownBy(() -> new Account(memberId, balance))
-                        .isInstanceOf(ValidException.class)
-                        .hasMessage("balance 은/는 음수가 될 수 없습니다.");
+                // then
+                assertThat(actual.getBalance()).isEqualTo(0L);
             }
         }
 
@@ -65,11 +49,8 @@ public class AccountTest {
 
             @Test
             void 포함되지_않으면_예외가_발생한다() {
-                // given
-                final var balance = 1000L;
-
                 // when & then
-                assertThatThrownBy(() -> new Account(null, balance))
+                assertThatThrownBy(() -> new Account(null))
                         .isInstanceOf(ValidException.class)
                         .hasMessage("memberId 은/는 null이 될 수 없습니다.");
             }

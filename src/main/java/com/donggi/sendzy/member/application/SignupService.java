@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SignupService {
 
-    public static final long INITIAL_ACCOUNT_BALANCE = 100000L;
-
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
@@ -33,6 +31,6 @@ public class SignupService {
 
         final var member = new Member(request.email(), passwordEncoder.encode(request.rawPassword()));
         final var createdMemberId = memberService.create(member);
-        accountRepository.create(new Account(createdMemberId, INITIAL_ACCOUNT_BALANCE));
+        accountRepository.create(new Account(createdMemberId));
     }
 }

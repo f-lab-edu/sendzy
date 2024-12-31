@@ -13,25 +13,18 @@ public class Account {
     private Long memberId;
     private Long balance;
 
-    public Account(final Long memberId, final Long balance) {
-        validate(memberId, balance);
+    public Account(final Long memberId) {
+        validate(memberId);
         this.memberId = memberId;
-        this.balance = balance;
+        this.balance = 0L;
     }
 
-    private void validate(final Long memberId, final Long balance) {
+    private void validate(final Long memberId) {
         validateMemberId(memberId);
-        validateBalance(balance);
     }
 
     private void validateMemberId(final Long memberId) {
         final var fieldName = "memberId";
         Validator.notNull(memberId, fieldName);
-    }
-
-    private void validateBalance(final Long balance) {
-        final var fieldName = "balance";
-        Validator.notNull(balance, fieldName);
-        Validator.notNegative(balance, fieldName);
     }
 }
