@@ -30,7 +30,7 @@ public class SignupService {
         }
 
         final var member = new Member(request.email(), passwordEncoder.encode(request.rawPassword()));
-        final var createdMemberId = memberService.create(member);
+        final var createdMemberId = memberService.registerMemberAndGetId(member);
         accountRepository.create(new Account(createdMemberId));
     }
 }

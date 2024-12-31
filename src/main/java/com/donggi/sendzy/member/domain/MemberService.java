@@ -12,7 +12,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long create(final Member member) {
+    public Long registerMemberAndGetId(final Member member) {
         return memberRepository.create(member);
     }
 
