@@ -24,9 +24,4 @@ public interface MemberRepository {
      * @return 조회된 회원
      */
     Optional<Member> findByEmail(String email);
-
-    /**
-     * 저장된 모든 회원을 삭제합니다.
-     */
-    void deleteAll();
 }

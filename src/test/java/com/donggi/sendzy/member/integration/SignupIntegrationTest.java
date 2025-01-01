@@ -2,6 +2,7 @@ package com.donggi.sendzy.member.integration;
 
 import com.donggi.sendzy.member.domain.Member;
 import com.donggi.sendzy.member.domain.MemberRepository;
+import com.donggi.sendzy.member.domain.TestMemberRepository;
 import com.donggi.sendzy.member.dto.SignupRequest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,13 +27,16 @@ public class SignupIntegrationTest {
     private int port;
 
     @Autowired
+    private TestMemberRepository testMemberRepository;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     private static final String SIGNUP_URL = "/v1/signup";
 
     @BeforeEach
     void setUp() {
-        memberRepository.deleteAll();
+        testMemberRepository.deleteAll();
     }
 
     @Nested
