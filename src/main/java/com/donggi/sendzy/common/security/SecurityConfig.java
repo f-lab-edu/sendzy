@@ -21,7 +21,6 @@ import org.springframework.security.web.SecurityFilterChain;
  * Configuration 은 내부적으로 @Component 를 포함하고 있어 컴포넌트 스캔 대상이 됩니다.
  * 이를 통해 스프링 컨테이너에게 해당 클래스가 Bean 구성 클래스임을 알려줍니다.
  */
-@EnableMethodSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -40,6 +39,7 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((auth) -> auth
+                .requestMatchers("/v1/account/balance").authenticated()
                 .requestMatchers("/v1/**").permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(session -> session
