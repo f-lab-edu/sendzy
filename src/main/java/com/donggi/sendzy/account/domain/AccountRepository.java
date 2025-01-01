@@ -17,9 +17,4 @@ public interface AccountRepository {
      * @return 조회된 계좌
      */
     Optional<Account> findByMemberId(Long memberId);
-
-    /**
-     * 저장된 모든 계좌를 삭제합니다.
-     */
-    void deleteAll();
 }

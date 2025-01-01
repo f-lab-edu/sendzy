@@ -16,9 +16,4 @@ public class AccountService {
         return accountRepository.findByMemberId(memberId)
             .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다. :" + memberId));
     }
-
-    @Transactional
-    public void deleteAll() {
-        accountRepository.deleteAll();
-    }
 }
