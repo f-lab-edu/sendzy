@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.donggi.sendzy.account.infrastructure.AccountMapper">
+
+    <insert id="create" parameterType="com.donggi.sendzy.account.domain.Account" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO account (member_id, balance)
+        VALUES (#{memberId}, #{balance})
+    </insert>
+
+    <select id="findByMemberId" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
+        SELECT id, member_id, balance FROM account WHERE member_id = #{memberId}
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM account
+    </delete>
+
+</mapper>

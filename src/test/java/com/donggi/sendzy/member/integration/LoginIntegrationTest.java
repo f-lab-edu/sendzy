@@ -2,7 +2,7 @@ package com.donggi.sendzy.member.integration;
 
 import com.donggi.sendzy.member.TestUtils;
 import com.donggi.sendzy.member.application.SignupService;
-import com.donggi.sendzy.member.domain.MemberRepository;
+import com.donggi.sendzy.member.domain.TestMemberRepository;
 import com.donggi.sendzy.member.dto.LoginRequest;
 import com.donggi.sendzy.member.dto.SignupRequest;
 import io.restassured.http.ContentType;
@@ -30,13 +30,13 @@ public class LoginIntegrationTest {
     private SignupService signupService;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private TestMemberRepository testMemberRepository;
 
     private static final String LOGIN_URL = "/v1/login";
 
     @BeforeEach
     void setUp() {
-        memberRepository.deleteAll();
+        testMemberRepository.deleteAll();
     }
 
     @Nested

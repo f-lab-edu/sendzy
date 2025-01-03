@@ -18,9 +18,12 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private TestMemberRepository testMemberRepository;
+
     @BeforeEach
     void setUp() {
-        memberRepository.deleteAll();
+        testMemberRepository.deleteAll();
     }
 
     @Test
