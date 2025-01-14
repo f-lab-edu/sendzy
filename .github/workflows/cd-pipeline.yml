@@ -24,10 +24,13 @@ jobs:
       - name: cache gradle dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.gradle/caches
+          path: | 
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle
+            ${{ runner.os }}
 
       - name: build with Gradle
         run: ./gradlew clean build
