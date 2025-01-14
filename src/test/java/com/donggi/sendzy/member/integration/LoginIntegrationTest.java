@@ -69,7 +69,7 @@ public class LoginIntegrationTest {
         class 이메일을_가진_회원이_존재하지_않으면 {
 
             @Test
-            void _404_상태_코드를_응답한다() {
+            void _401_상태_코드를_응답한다() {
                 // given
                 var expected = new LoginRequest(TestUtils.DEFAULT_EMAIL, TestUtils.DEFAULT_RAW_PASSWORD);
 
@@ -81,7 +81,7 @@ public class LoginIntegrationTest {
                 .when()
                     .post(LOGIN_URL)
                 .then()
-                    .statusCode(HttpStatus.NOT_FOUND.value());
+                    .statusCode(HttpStatus.UNAUTHORIZED.value());
             }
         }
 
@@ -89,7 +89,7 @@ public class LoginIntegrationTest {
         class 이메일을_가진_회원이_존재하지만_입력한_비밀번호가_일치하지_않으면 {
 
             @Test
-            void _400_상태_코드를_응답한다() {
+            void _401_상태_코드를_응답한다() {
                 // given
                 signupService.signup(new SignupRequest(TestUtils.DEFAULT_EMAIL, TestUtils.DEFAULT_RAW_PASSWORD));
                 var expected = new LoginRequest(TestUtils.DEFAULT_EMAIL, TestUtils.INVALID_RAW_PASSWORD);
@@ -102,7 +102,7 @@ public class LoginIntegrationTest {
                 .when()
                     .post(LOGIN_URL)
                 .then()
-                    .statusCode(HttpStatus.BAD_REQUEST.value());
+                    .statusCode(HttpStatus.UNAUTHORIZED.value());
             }
         }
     }
