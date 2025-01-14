@@ -1,3 +1,17 @@
+server:
+  servlet:
+    session:
+      timeout: 20m
+      cookie:
+        http-only: true
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  config-location: classpath:mybatis-config.xml
+
+---
+spring.config.activate.on-profile: local
+
 spring:
   datasource:
     url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -9,5 +23,32 @@ spring:
       schema-locations: classpath:db/schema.sql
 
 ---
-spring.config.activate.on-profile: local
+spring.config.activate.on-profile: local-dev
 
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+---
+spring.config.activate.on-profile: dev
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+---
+spring.config.activate.on-profile: live
+
+server:
+  servlet:
+    session:
+      timeout: 20m
+      cookie:
+        http-only: true
+        secure: true
