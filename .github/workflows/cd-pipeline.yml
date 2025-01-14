@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: ssh proxy command
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
