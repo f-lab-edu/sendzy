@@ -62,4 +62,9 @@ jobs:
           proxy_key: ${{ secrets.PROXY_KEY }}
           proxy_port: ${{ secrets.PROXY_PORT }}
           script: |
-            ls -al
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY_NAME }}:latest
+            if [ "$(docker ps -q -f name=sendzy-backend)" ]; then
+                docker stop sendzy-backend
+                docker rm sendzy-backend
+            fi
+            docker run --name sendzy-backend -d ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY_NAME }}:latest
