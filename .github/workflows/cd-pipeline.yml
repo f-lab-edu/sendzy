@@ -45,8 +45,10 @@ jobs:
       - name: authenticate to ECR
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-#      - name: build and push docker image to ECR
-#        run: ./gradlew jib --image=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY_NAME }}:latest
+      - name: build and push docker image to ECR
+        env:
+          ACTIVE_PROFILE: dev
+        run: ./gradlew jib --image=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY_NAME }}:latest
 
       - name: ssh proxy command
         uses: appleboy/ssh-action@v1.2.0

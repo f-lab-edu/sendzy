@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.google.cloud.tools.jib' version '3.4.4'
 }
 
 group = 'com.donggi-lee-bit'
@@ -32,6 +33,20 @@ dependencies {
 	testImplementation 'io.rest-assured:json-path'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testRuntimeOnly 'com.h2database:h2'
+}
+
+jib {
+	from {
+		image = "eclipse-temurin:21-alpine"
+	}
+	container {
+		ports = ["8080"]
+		jvmFlags = [
+			"-Xms512m",
+			"-Xmx1024m",
+			"-Dspring.profiles.active=${System.getenv('ACTIVE_PROFILE')}"
+		]
+	}
 }
 
 tasks.named('test') {
