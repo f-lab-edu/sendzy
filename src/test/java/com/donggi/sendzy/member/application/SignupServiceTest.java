@@ -36,7 +36,7 @@ public class SignupServiceTest {
         signupService.signup(request);
 
         // then
-        var savedMember = memberService.findByEmailOrThrow(DEFAULT_EMAIL);
+        var savedMember = memberService.findByEmail(DEFAULT_EMAIL).get();
         var savedAccount = accountService.getByMemberId(savedMember.getId());
         assertThat(savedMember).isNotNull();
         assertThat(savedAccount).isNotNull();

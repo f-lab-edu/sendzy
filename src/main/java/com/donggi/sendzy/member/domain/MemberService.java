@@ -1,9 +1,10 @@
 package com.donggi.sendzy.member.domain;
 
-import com.donggi.sendzy.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member findByEmailOrThrow(final String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException("요청한 회원 정보를 찾을 수 없습니다." + email));
+    public Optional<Member> findByEmail(final String email) {
+        return memberRepository.findByEmail(email);
     }
 }
