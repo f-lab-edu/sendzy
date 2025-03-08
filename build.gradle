@@ -44,7 +44,7 @@ jib {
 		jvmFlags = [
 			"-Xms512m",
 			"-Xmx1024m",
-			"-javaagent:./platform/pinpoint-agent/pinpoint-bootstrap-2.5.0.jar",
+			"-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.5.0.jar",
 			"-Dspring.profiles.active=${System.getenv('ACTIVE_PROFILE')}",
 			"-Dpinpoint.config=./platform/pinpoint-agent/pinpoint.config",
 			"-Dpinpoint.collector.ip=${System.getenv('PINPOINT_COLLECTOR_IP')}",
@@ -53,7 +53,7 @@ jib {
 		]
 	}
 	extraDirectories {
-		paths = file('./platform/pinpoint-agent')
+		paths = file('/pinpoint-agent')
 	}
 }
 
