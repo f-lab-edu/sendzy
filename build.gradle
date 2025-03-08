@@ -52,6 +52,9 @@ jib {
 			"-Dpinpoint.applicationName=${System.getenv('PINPOINT_APP_NAME')}"
 		]
 	}
+	extraDirectories {
+		paths = file('./platform/pinpoint-agent')
+	}
 }
 
 tasks.named('test') {
