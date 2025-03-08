@@ -48,6 +48,9 @@ jobs:
       - name: build and push docker image to ECR
         env:
           ACTIVE_PROFILE: dev
+          PINPOINT_COLLECTOR_IP: ${{ secrets.PINPOINT_COLLECTOR_IP }}
+          PINPOINT_AGENT_ID: ${{ secrets.PINPOINT_AGENT_ID }}
+          PINPOINT_APP_NAME: ${{ secrets.PINPOINT_APP_NAME }}
         run: ./gradlew jib --image=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY_NAME }}:latest
 
       - name: deploy to EC2
