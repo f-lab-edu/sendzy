@@ -53,7 +53,7 @@ jib {
 		]
 	}
 	extraDirectories {
-		paths = file('/pinpoint-agent')
+		paths = file('src/main/jib/pinpoint-agent')
 	}
 }
 
