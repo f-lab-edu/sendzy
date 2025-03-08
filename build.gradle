@@ -54,7 +54,6 @@ jib {
 			"-Xmx1024m",
 			"-javaagent:/app/libs/pinpoint-agent/pinpoint-bootstrap-2.5.0.jar",
 			"-Dspring.profiles.active=${System.getenv('ACTIVE_PROFILE')}",
-			"-Dprofiler.transport.grpc.collector.ip=${System.getenv('PINPOINT_COLLECTOR_IP')}",
 			"-Dpinpoint.config=/app/libs/pinpoint-agent/pinpoint-root.config",
 			"-Dpinpoint.agentId=${System.getenv('PINPOINT_AGENT_ID')}",
 			"-Dpinpoint.applicationName=${System.getenv('PINPOINT_APP_NAME')}"
