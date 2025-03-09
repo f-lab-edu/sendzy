@@ -52,7 +52,7 @@ jib {
 		jvmFlags = [
 			"-Xms512m",
 			"-Xmx1024m",
-			"-javaagent:/app/libs/pinpoint-agent/pinpoint-bootstrap-2.5.0.jar",
+			"-javaagent:/app/libs/pinpoint-agent/pinpoint-bootstrap-3.0.1.jar",
 			"-Dspring.profiles.active=${System.getenv('ACTIVE_PROFILE')}",
 			"-Dprofiler.transport.grpc.collector.ip=${System.getenv('PINPOINT_COLLECTOR_IP')}",
 			"-Dpinpoint.config=/app/libs/pinpoint-agent/pinpoint-root.config",
