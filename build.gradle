@@ -39,12 +39,25 @@ jib {
 	from {
 		image = "eclipse-temurin:21-alpine"
 	}
+	extraDirectories {
+		paths {
+			path {
+				from = file('src/main/jib/pinpoint-agent-3.0.1')
+				into = '/app/libs/pinpoint-agent'
+			}
+		}
+	}
 	container {
 		ports = ["8080"]
 		jvmFlags = [
 			"-Xms512m",
 			"-Xmx1024m",
-			"-Dspring.profiles.active=${System.getenv('ACTIVE_PROFILE')}"
+			"-javaagent:/app/libs/pinpoint-agent/pinpoint-bootstrap-3.0.1.jar",
+			"-Dspring.profiles.active=${System.getenv('ACTIVE_PROFILE')}",
+			"-Dprofiler.transport.grpc.collector.ip=${System.getenv('PINPOINT_COLLECTOR_IP')}",
+			"-Dpinpoint.config=/app/libs/pinpoint-agent/pinpoint-root.config",
+			"-Dpinpoint.agentId=${System.getenv('PINPOINT_AGENT_ID')}",
+			"-Dpinpoint.applicationName=${System.getenv('PINPOINT_APP_NAME')}"
 		]
 	}
 }
