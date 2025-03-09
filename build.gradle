@@ -42,7 +42,7 @@ jib {
 	extraDirectories {
 		paths {
 			path {
-				from = file('src/main/jib/pinpoint-agent')
+				from = file('src/main/jib/pinpoint-agent-3.0.1')
 				into = '/app/libs/pinpoint-agent'
 			}
 		}
