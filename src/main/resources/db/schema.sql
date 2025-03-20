@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS remittance_status_history (
 CREATE TABLE IF NOT EXISTS account (
    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
    `member_id` BIGINT NOT NULL,
-   `balance` BIGINT NOT NULL
+   `balance` BIGINT NOT NULL,
+   `pending_amount` BIGINT NOT NULL
 );
 
 ALTER TABLE remittance_request ADD CONSTRAINT remittance_request_receiver_id_fk FOREIGN KEY (receiver_id) REFERENCES member (id);

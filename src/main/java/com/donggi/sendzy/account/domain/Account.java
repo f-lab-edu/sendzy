@@ -12,11 +12,13 @@ public class Account {
     private Long id;
     private Long memberId;
     private Long balance;
+    private Long pendingAmount;
 
     public Account(final Long memberId) {
         validate(memberId);
         this.memberId = memberId;
         this.balance = 0L;
+        this.pendingAmount = 0L;
     }
 
     private void validate(final Long memberId) {

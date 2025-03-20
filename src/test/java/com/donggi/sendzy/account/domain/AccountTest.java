@@ -42,6 +42,18 @@ public class AccountTest {
                 // then
                 assertThat(actual.getBalance()).isEqualTo(0L);
             }
+
+            @Test
+            void 초기_대기_금액은_0이다() {
+                // given
+                final var memberId = 1L;
+
+                // when
+                final var actual = new Account(memberId);
+
+                // then
+                assertThat(actual.getPendingAmount()).isEqualTo(0L);
+            }
         }
 
         @Nested

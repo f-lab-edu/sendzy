@@ -4,12 +4,12 @@
 <mapper namespace="com.donggi.sendzy.account.infrastructure.AccountMapper">
 
     <insert id="create" parameterType="com.donggi.sendzy.account.domain.Account" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO account (member_id, balance)
+        INSERT INTO account (member_id, balance, pending_amount)
         VALUES (#{memberId}, #{balance})
     </insert>
 
     <select id="findByMemberId" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
-        SELECT id, member_id, balance FROM account WHERE member_id = #{memberId}
+        SELECT id, member_id, balance, pending_amount FROM account WHERE member_id = #{memberId}
     </select>
 
     <delete id="deleteAll">
