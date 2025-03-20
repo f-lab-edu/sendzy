@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS remittance_history (
   `id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `remittance_request_id` bigint,
   `member_id` bigint NOT NULL,
-  `email` bigint NOT NULL,
+  `email` varchar(300) NOT NULL,
   `description` varchar(100) NOT NULL,
   `amount` bigint NOT NULL,
   `balance` bigint NOT NULL,

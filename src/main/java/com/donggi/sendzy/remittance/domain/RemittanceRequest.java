@@ -20,4 +20,17 @@ public class RemittanceRequest {
     private RemittanceRequestStatus status;
     private Long amount;
     private LocalDateTime createdAt;
+
+    public RemittanceRequest(
+        final Long senderId,
+        final Long receiverId,
+        final RemittanceRequestStatus status,
+        final Long amount
+    ) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.status = status;
+        this.amount = amount;
+        this.createdAt = LocalDateTime.now();
+    }
 }

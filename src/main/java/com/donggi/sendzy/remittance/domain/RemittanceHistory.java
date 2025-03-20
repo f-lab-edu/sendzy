@@ -22,4 +22,21 @@ public class RemittanceHistory {
     private Long amount;
     private Long balance;
     private LocalDateTime createdAt;
+
+    public RemittanceHistory(
+        final Long remittanceRequestId,
+        final Long memberId,
+        final String email,
+        final String description,
+        final Long amount,
+        final Long balance
+    ) {
+        this.remittanceRequestId = remittanceRequestId;
+        this.memberId = memberId;
+        this.email = email;
+        this.description = description;
+        this.amount = amount;
+        this.balance = balance;
+        this.createdAt = LocalDateTime.now();
+    }
 }

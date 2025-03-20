@@ -23,4 +23,21 @@ public class RemittanceStatusHistory {
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
     private LocalDateTime acceptedAt;
+
+    public RemittanceStatusHistory(
+        final Long requestId,
+        final Long senderId,
+        final Long receiverId,
+        final Long amount,
+        final RemittanceRequestStatus status
+    ) {
+        this.requestId = requestId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.amount = amount;
+        this.status = status;
+        this.createdAt = LocalDateTime.now();
+        this.expiredAt = null;
+        this.acceptedAt = null;
+    }
 }
