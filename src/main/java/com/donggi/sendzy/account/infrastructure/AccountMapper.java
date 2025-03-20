@@ -9,9 +9,11 @@ import java.util.Optional;
 
 @Mapper
 public interface AccountMapper extends AccountRepository, TestAccountRepository {
-    Long create(Account account);
+    Long create(final Account account);
 
-    Optional<Account> findByMemberId(Long memberId);
+    Optional<Account> findByMemberId(final Long memberId);
 
     void deleteAll();
+
+    void updatePendingAmount(final Long id, final Long pendingAmount);
 }

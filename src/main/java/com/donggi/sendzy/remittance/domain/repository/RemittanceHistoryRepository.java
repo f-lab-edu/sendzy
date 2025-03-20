@@ -9,5 +9,12 @@ public interface RemittanceHistoryRepository {
      * @param remittanceHistory 저장할 송금 내역
      * @return 저장된 송금 ID
      */
-    Long create(RemittanceHistory remittanceHistory);
+    Long create(final RemittanceHistory remittanceHistory);
+
+    /**
+     * 송금 내역을 조회합니다.
+     * @param id 조회할 송금 ID
+     * @return 조회된 송금 내역
+     */
+    RemittanceHistory findById(final Long id);
 }

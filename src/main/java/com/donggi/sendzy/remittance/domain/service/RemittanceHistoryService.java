@@ -1,0 +1,25 @@
+package com.donggi.sendzy.remittance.domain.service;
+
+import com.donggi.sendzy.remittance.domain.RemittanceHistory;
+import com.donggi.sendzy.remittance.domain.repository.RemittanceHistoryRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class RemittanceHistoryService {
+
+    private final RemittanceHistoryRepository remittanceHistoryRepository;
+
+    @Transactional
+    public Long recordHistoryAndGetId(final RemittanceHistory remittanceHistory) {
+        return remittanceHistoryRepository.create(remittanceHistory);
+    }
+
+    @Transactional
+    public void updateRequestId(final Long historyId, final Long requestId) {
+        final var remittanceHistory = remittanceHistoryRepository.findById(historyId);
+        remittanceHistory.updateRequestId(requestId);
+    }
+}

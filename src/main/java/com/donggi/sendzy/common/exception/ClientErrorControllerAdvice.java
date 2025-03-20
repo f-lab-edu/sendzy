@@ -1,5 +1,6 @@
 package com.donggi.sendzy.common.exception;
 
+import com.donggi.sendzy.account.exception.InvalidWithdrawalException;
 import com.donggi.sendzy.member.exception.EmailDuplicatedException;
 import com.donggi.sendzy.member.exception.InvalidPasswordException;
 import com.donggi.sendzy.member.exception.MemberNotFoundException;
@@ -67,5 +68,13 @@ public class ClientErrorControllerAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ProblemDetail handleAccessDeniedException(AccessDeniedException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.getMessage());
+    }
+
+    /**
+     * 클라이언트가 출금 요청을 잘못한 경우
+     */
+    @ExceptionHandler(InvalidWithdrawalException.class)
+    public ProblemDetail handleInvalidWithdrawalException(final InvalidWithdrawalException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }

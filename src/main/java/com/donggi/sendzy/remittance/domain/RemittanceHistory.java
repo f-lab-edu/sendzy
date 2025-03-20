@@ -39,4 +39,8 @@ public class RemittanceHistory {
         this.balance = balance;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void updateRequestId(final Long requestId) {
+        this.remittanceRequestId = requestId;
+    }
 }

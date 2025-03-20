@@ -16,4 +16,7 @@
         DELETE FROM account
     </delete>
 
+    <update id="updatePendingAmount" parameterType="com.donggi.sendzy.account.domain.Account">
+        UPDATE account SET pending_amount = #{pendingAmount} WHERE id = #{id}
+    </update>
 </mapper>
