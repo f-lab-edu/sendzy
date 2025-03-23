@@ -27,6 +27,14 @@ public class Account {
         this.pendingAmount += amount;
     }
 
+    public void deposit(final Long amount) {
+        final var fieldName = "amount";
+        Validator.notNull(amount, fieldName);
+        Validator.notNegative(amount, fieldName);
+
+        this.balance += amount;
+    }
+
     private void validate(final Long memberId) {
         validateMemberId(memberId);
     }
