@@ -30,7 +30,7 @@ public class RemittanceRequestApplicationService {
     private final MemberService memberService;
 
     /**
-     *
+     * 송금 요청
      * @param senderId 송금자 ID
      * @param receiverId 수신자 ID
      * @param amount 송금할 금액
