@@ -3,6 +3,7 @@ package com.donggi.sendzy.member.domain;
 import com.donggi.sendzy.common.utils.RegexPattern;
 import com.donggi.sendzy.common.utils.Validator;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public class Member {
 
     private static final Length EMAIL_LENGTH = new Length(5, 300);

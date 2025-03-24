@@ -90,7 +90,7 @@ public class AccountTest {
             }
 
             @Test
-            void 음수면_ValidException_예외가_발생한다() {
+            void 음수면_InvalidWithdrawalException_예외가_발생한다() {
                 // given
                 final var memberId = TestUtils.DEFAULT_MEMBER_ID;
                 final var account = new Account(memberId);
@@ -98,8 +98,8 @@ public class AccountTest {
 
                 // when & then
                 assertThatThrownBy(() -> account.withdraw(amount))
-                    .isInstanceOf(ValidException.class)
-                    .hasMessage("amount 은/는 음수가 될 수 없습니다.");
+                    .isInstanceOf(InvalidWithdrawalException.class)
+                    .hasMessage("송금액은 0원 이상이어야 합니다. 사용자 요청 금액: -1");
             }
 
             @Test

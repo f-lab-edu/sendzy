@@ -46,13 +46,14 @@ public class MemberRepositoryTest {
         // given
         final var email = TestUtils.DEFAULT_EMAIL;
         final var password = TestUtils.DEFAULT_ENCODED_PASSWORD;
-        final var expected = memberRepository.create(new Member(email, password));
+        final var expected = new Member(email, password);
+        memberRepository.create(expected);
 
         // when
         final var actual = memberRepository.findByEmail(email).get();
 
         // then
-        assertThat(actual.getId()).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
