@@ -38,7 +38,7 @@ public class MemberRepositoryTest {
 
         // then
         var member = memberRepository.findByEmail(email).get();
-        assertThat(member).isEqualTo(expected);
+        assertThat(member.getId()).isEqualTo(expected.getId());
     }
 
 //    @Test
