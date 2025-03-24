@@ -14,7 +14,8 @@ public class RemittanceHistoryService {
 
     @Transactional
     public Long recordHistoryAndGetId(final RemittanceHistory remittanceHistory) {
-        return remittanceHistoryRepository.create(remittanceHistory);
+        remittanceHistoryRepository.create(remittanceHistory);
+        return remittanceHistory.getId();
     }
 
     @Transactional

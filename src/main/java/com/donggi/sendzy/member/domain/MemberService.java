@@ -15,7 +15,8 @@ public class MemberService {
 
     @Transactional
     public Long registerMemberAndGetId(final Member member) {
-        return memberRepository.create(member);
+        memberRepository.create(member);
+        return member.getId();
     }
 
     @Transactional(readOnly = true)

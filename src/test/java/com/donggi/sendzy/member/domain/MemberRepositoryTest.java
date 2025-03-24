@@ -27,16 +27,18 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    void 멤버를_저장하고_저장된_행의_수를_반환한다() {
+    void 멤버를_저장하고_저장된_행의_수가_반환된다() {
         // given
         final var email = TestUtils.DEFAULT_EMAIL;
         final var password = TestUtils.DEFAULT_ENCODED_PASSWORD;
+        final var expected = new Member(email, password);
 
         // when
-        final var actual = memberRepository.create(new Member(email, password));
+        memberRepository.create(expected);
 
         // then
-        assertThat(actual).isEqualTo(1L);
+        var member = memberRepository.findByEmail(email).get();
+        assertThat(member.getId()).isEqualTo(expected.getId());
     }
 
     @Test

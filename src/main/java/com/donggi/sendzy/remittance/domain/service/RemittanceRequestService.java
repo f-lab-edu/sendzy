@@ -10,10 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RemittanceRequestService {
 
-    RemittanceRequestRepository remittanceRequestRepository;
+    private final RemittanceRequestRepository remittanceRequestRepository;
 
     @Transactional
     public Long recordRequestAndGetId(final RemittanceRequest remittanceRequest) {
-        return remittanceRequestRepository.create(remittanceRequest);
+        remittanceRequestRepository.create(remittanceRequest);
+        return remittanceRequest.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public RemittanceRequest findBySenderId(final Long senderId) {
+        return remittanceRequestRepository.findBySenderId(senderId)
+            .orElseThrow(() -> new IllegalArgumentException("RemittanceRequest not found"));
     }
 }
