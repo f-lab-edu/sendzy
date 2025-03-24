@@ -38,23 +38,21 @@ public class MemberRepositoryTest {
 
         // then
         var member = memberRepository.findByEmail(email).get();
-        assertThat(member.getId()).isEqualTo(expected.getId());
+        assertThat(member).isEqualTo(expected);
     }
 
-    @Test
-    void 이메일로_회원을_조회한다() {
-        // given
-        final var email = TestUtils.DEFAULT_EMAIL;
-        final var password = TestUtils.DEFAULT_ENCODED_PASSWORD;
-        final var expected = new Member(email, password);
-        memberRepository.create(expected);
-
-        // when
-        final var actual = memberRepository.findByEmail(email).get();
-
-        // then
-        assertThat(actual).isEqualTo(expected);
-    }
+//    @Test
+//    void 이메일로_회원을_조회한다() {
+//        // given
+//        final var expected = new Member(TestUtils.DEFAULT_EMAIL, TestUtils.DEFAULT_ENCODED_PASSWORD);
+//        memberRepository.create(expected);
+//
+//        // when
+//        final var actual = memberRepository.findByEmail(expected.getEmail()).get();
+//
+//        // then
+//        assertThat(actual).isEqualTo(expected);
+//    }
 
     @Test
     void 이메일로_회원_조회시_등록된_이메일이_없으면_빈값을_반환한다() {
