@@ -26,14 +26,18 @@ public class RemittanceRequestRepositoryTest {
     @Test
     void 송금_내역을_저장하고_ID를_반환한다() {
         // given
-        final var senderId = memberRepository.create(new Member(TestUtils.DEFAULT_EMAIL, TestUtils.DEFAULT_ENCODED_PASSWORD));
-        final var receiverId = memberRepository.create(new Member("hello@sendzy.com", TestUtils.DEFAULT_ENCODED_PASSWORD));
+        final var senderEmail = TestUtils.DEFAULT_EMAIL;
+        final var receiverEmail = "hello@sendzy.com";
+        memberRepository.create(new Member(senderEmail, TestUtils.DEFAULT_ENCODED_PASSWORD));
+        memberRepository.create(new Member(receiverEmail, TestUtils.DEFAULT_ENCODED_PASSWORD));
+        final var sender = memberRepository.findByEmail(senderEmail).get();
+        final var receiver = memberRepository.findByEmail(receiverEmail).get();
 
         // remittance_request의 sender_id, receiver_id 에는 member 테이블의 id 필드를
         // 외래키 제약 조건으로 가지고 있어 실제 존재하는 ID 값을 설정
         var expected = new RemittanceRequest(
-            senderId,
-            receiverId,
+            sender.getId(),
+            receiver.getId(),
             RemittanceRequestStatus.PENDING,
             TestUtils.DEFAULT_AMOUNT
         );
