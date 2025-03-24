@@ -8,4 +8,11 @@
         VALUES (#{remittanceRequestId}, #{memberId}, #{email}, #{description}, #{amount}, #{balance}, #{createdAt})
     </insert>
 
+    <select id="findById" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
+        SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE id = #{id}
+    </select>
+
+    <select id="findBySenderId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
+        SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE member_id = #{memberId}
+    </select>
 </mapper>

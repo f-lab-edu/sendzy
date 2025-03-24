@@ -47,7 +47,6 @@ public class Account {
     private void validateWithdraw(final Long amount) {
         final var fieldName = "amount";
         Validator.notNull(amount, fieldName);
-        Validator.notNegative(amount, fieldName);
 
         if (amount <= 0) {
             throw new InvalidWithdrawalException(amount);

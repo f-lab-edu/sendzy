@@ -17,4 +17,11 @@ public interface RemittanceHistoryRepository {
      * @return 조회된 송금 내역
      */
     RemittanceHistory findById(final Long id);
+
+    /**
+     * 송금자 ID로 송금 내역을 조회합니다.
+     * @param senderId 송금자 ID
+     * @return 조회된 송금 내역
+     */
+    RemittanceHistory findBySenderId(final Long senderId);
 }

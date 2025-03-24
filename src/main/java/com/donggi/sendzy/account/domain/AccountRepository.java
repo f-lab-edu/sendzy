@@ -31,4 +31,11 @@ public interface AccountRepository {
      * @param pendingAmount 대기 중인 금액
      */
     void updatePendingAmount(final Long id, final Long pendingAmount);
+
+    /**
+     * 계좌의 잔액을 업데이트합니다.
+     * @param id 계좌 ID
+     * @param balance 잔액
+     */
+    void updateBalance(final Long id, final Long balance);
 }

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS member (
-  `id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `email` varchar(300) NOT NULL UNIQUE,
   `encoded_password` varchar(300) NOT NULL,
   `created_at` datetime NOT NULL

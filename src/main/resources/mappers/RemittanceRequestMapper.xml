@@ -8,4 +8,11 @@
         VALUES (#{senderId}, #{receiverId}, #{status}, #{amount}, #{createdAt})
     </insert>
 
+    <select id="findBySenderId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        SELECT id, id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE sender_id = #{senderId}
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM remittance_request
+    </delete>
 </mapper>

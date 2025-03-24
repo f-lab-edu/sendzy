@@ -2,6 +2,8 @@ package com.donggi.sendzy.remittance.domain.repository;
 
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 
+import java.util.Optional;
+
 public interface RemittanceStatusHistoryRepository {
 
     /**
@@ -9,5 +11,12 @@ public interface RemittanceStatusHistoryRepository {
      * @param remittanceStatusHistory 저장할 송금 요청 상태 변경 이력
      * @return 저장된 변경 이력 ID
      */
-    Long create(RemittanceStatusHistory remittanceStatusHistory);
+    Long create(final RemittanceStatusHistory remittanceStatusHistory);
+
+    /**
+     * 송금자 ID로 송금 요청 상태의 변경 이력을 조회합니다.
+     * @param senderId 송금자 ID
+     * @return 송금 요청 상태 변경 이력
+     */
+    Optional<RemittanceStatusHistory> findBySenderId(final Long senderId);
 }

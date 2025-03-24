@@ -4,6 +4,7 @@ import com.donggi.sendzy.account.domain.Account;
 import com.donggi.sendzy.account.domain.AccountRepository;
 import com.donggi.sendzy.account.domain.TestAccountRepository;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
 
@@ -15,5 +16,7 @@ public interface AccountMapper extends AccountRepository, TestAccountRepository 
 
     void deleteAll();
 
-    void updatePendingAmount(final Long id, final Long pendingAmount);
+    void updatePendingAmount(@Param("id") final Long id, @Param("pendingAmount") final Long pendingAmount);
+
+    void updateBalance(@Param("id") final Long id, @Param("balance") final Long balance);
 }

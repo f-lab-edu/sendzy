@@ -23,4 +23,9 @@ public class RemittanceHistoryService {
         final var remittanceHistory = remittanceHistoryRepository.findById(historyId);
         remittanceHistory.updateRequestId(requestId);
     }
+
+    @Transactional(readOnly = true)
+    public RemittanceHistory findBySenderId(final Long senderId) {
+        return remittanceHistoryRepository.findBySenderId(senderId);
+    }
 }
