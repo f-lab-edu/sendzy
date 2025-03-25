@@ -47,10 +47,10 @@ public class ClientErrorControllerAdvice {
     }
 
     /**
-     * 클라이언트가 요청한 회원이 존재하지 않는 경우
+     * 클라이언트가 요청한 데이터가 존재하지 않는 경우
      */
-    @ExceptionHandler(MemberNotFoundException.class)
-    public ProblemDetail handleMemberNotFoundException(MemberNotFoundException e) {
+    @ExceptionHandler(NotFoundException.class)
+    public ProblemDetail handleMemberNotFoundException(NotFoundException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
@@ -75,6 +75,14 @@ public class ClientErrorControllerAdvice {
      */
     @ExceptionHandler(InvalidWithdrawalException.class)
     public ProblemDetail handleInvalidWithdrawalException(final InvalidWithdrawalException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
+     * 클라이언트 요청이 잘못된 경우
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ProblemDetail handleBadRequestException(final BadRequestException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }
