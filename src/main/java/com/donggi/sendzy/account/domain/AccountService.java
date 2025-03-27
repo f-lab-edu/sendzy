@@ -12,25 +12,25 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     @Transactional(readOnly = true)
-    public Account getByMemberId(final Long memberId) {
+    public Account getByMemberId(final long memberId) {
         return accountRepository.findByMemberId(memberId)
             .orElseThrow(() -> new AccountNotFoundException(memberId));
     }
 
     @Transactional
-    public void withdraw(final Account account, final Long amount) {
+    public void withdraw(final Account account, final long amount) {
         account.withdraw(amount);
         accountRepository.updatePendingAmount(account.getId(), account.getPendingAmount());
     }
 
     @Transactional
-    public void deposit(final Account account, final Long amount) {
+    public void deposit(final Account account, final long amount) {
         account.deposit(amount);
         accountRepository.updateBalance(account.getId(), account.getBalance());
     }
 
     @Transactional(readOnly = true)
-    public Account findByIdForUpdate(final Long memberId) {
+    public Account getByIdForUpdate(final long memberId) {
         return accountRepository.findByIdForUpdate(memberId)
             .orElseThrow(() -> new AccountNotFoundException(memberId));
     }

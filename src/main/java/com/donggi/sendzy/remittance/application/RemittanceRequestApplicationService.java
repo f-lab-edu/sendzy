@@ -41,8 +41,8 @@ public class RemittanceRequestApplicationService {
 
         // 계좌 ID를 오름차순으로 정렬하여 일관된 순서로 Lock 확보
         List<Long> sortedIds = getSortedIds(senderId, receiverId);
-        final Account firstAccount = accountService.findByIdForUpdate(sortedIds.get(0));
-        final Account secondAccount = accountService.findByIdForUpdate(sortedIds.get(1));
+        final Account firstAccount = accountService.getByIdForUpdate(sortedIds.get(0));
+        final Account secondAccount = accountService.getByIdForUpdate(sortedIds.get(1));
 
         final Account senderAccount = senderId.equals(firstAccount.getMemberId()) ? firstAccount : secondAccount;
         final Account receiverAccount = receiverId.equals(firstAccount.getMemberId()) ? firstAccount : secondAccount;
