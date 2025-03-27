@@ -4,12 +4,14 @@ import com.donggi.sendzy.remittance.domain.RemittanceHistory;
 import com.donggi.sendzy.remittance.domain.repository.RemittanceHistoryRepository;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface RemittanceHistoryMapper extends RemittanceHistoryRepository {
 
     Long create(final RemittanceHistory remittanceHistory);
 
-    RemittanceHistory findById(final Long id);
+    RemittanceHistory findById(final long id);
 
-    RemittanceHistory findBySenderId(final Long senderId);
+    List<RemittanceHistory> listBySenderId(final long senderId);
 }

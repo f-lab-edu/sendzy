@@ -167,7 +167,7 @@ class RemittanceRequestApplicationServiceTest {
                 remittanceRequestApplicationService.sendMoney(senderId, receiverId, 100L);
 
                 // then
-                final var remittanceHistory = remittanceHistoryService.findBySenderId(senderId);
+                final var remittanceHistory = remittanceHistoryService.listBySenderId(senderId);
                 assertThat(remittanceHistory).isNotNull();
             }
 
