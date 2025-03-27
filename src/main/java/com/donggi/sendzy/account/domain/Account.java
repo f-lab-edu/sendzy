@@ -48,16 +48,28 @@ public class Account {
         final var fieldName = "amount";
         Validator.notNull(amount, fieldName);
 
-        if (amount <= 0) {
+        if (!isAmountPositive(amount)) {
             throw new InvalidWithdrawalException(amount);
         }
 
-        if (this.balance < amount) {
+        if (!hasSufficientBalanceFor(amount)) {
             throw new InvalidWithdrawalException();
         }
 
-        if (this.balance < this.pendingAmount + amount) {
+        if (!hasSufficientBalanceIncludingPending(amount)) {
             throw new InvalidWithdrawalException();
         }
+    }
+
+    private boolean hasSufficientBalanceIncludingPending(long amount) {
+        return this.pendingAmount + amount <= this.balance;
+    }
+
+    private boolean hasSufficientBalanceFor(final long amount) {
+        return amount <= this.balance;
+    }
+
+    private boolean isAmountPositive(final long amount) {
+        return 0 < amount;
     }
 }
