@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class RemittanceHistoryService {
@@ -26,11 +24,6 @@ public class RemittanceHistoryService {
         final var remittanceHistory = remittanceHistoryRepository.findById(historyId);
         remittanceHistory.updateRequestId(requestId);
         remittanceHistoryRepository.update(remittanceHistory);
-    }
-
-    @Transactional(readOnly = true)
-    public List<RemittanceHistory> listBySenderId(final long senderId) {
-        return remittanceHistoryRepository.listBySenderId(senderId);
     }
 
     @Transactional(readOnly = true)

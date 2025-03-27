@@ -1,6 +1,5 @@
 package com.donggi.sendzy.remittance.domain.service;
 
-import com.donggi.sendzy.remittance.domain.RemittanceHistory;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.repository.RemittanceStatusHistoryRepository;
 import com.donggi.sendzy.remittance.exception.RemittanceStatusHistoryNotFoundException;
@@ -13,12 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RemittanceStatusHistoryService {
 
     private final RemittanceStatusHistoryRepository remittanceStatusHistoryRepository;
-
-    @Transactional(readOnly = true)
-    public RemittanceStatusHistory findBySenderId(final long senderId) {
-        return remittanceStatusHistoryRepository.findBySenderId(senderId)
-            .orElseThrow(RemittanceStatusHistoryNotFoundException::new);
-    }
 
     @Transactional(readOnly = true)
     public RemittanceStatusHistory getByRequestId(final long requestId) {

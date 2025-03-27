@@ -11,7 +11,5 @@ public interface RemittanceStatusHistoryMapper extends RemittanceStatusHistoryRe
 
     Long create(final RemittanceStatusHistory remittanceStatusHistory);
 
-    Optional<RemittanceStatusHistory> findBySenderId(final Long senderId);
-
     Optional<RemittanceStatusHistory> findByRequestId(final long requestId);
 }

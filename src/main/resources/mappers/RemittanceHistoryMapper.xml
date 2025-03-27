@@ -12,10 +12,6 @@
         SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE id = #{id}
     </select>
 
-    <select id="listBySenderId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
-        SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE member_id = #{memberId}
-    </select>
-
     <select id="findByRequestId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
         SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE remittance_request_id = #{remittanceRequestId}
     </select>
