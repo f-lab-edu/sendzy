@@ -19,4 +19,11 @@ public interface RemittanceRequestRepository {
      * @return 조회된 송금 요청 정보
      */
     Optional<RemittanceRequest> findBySenderId(final Long senderId);
+
+    /**
+     * 송금 요청 ID로 송금 요청 정보를 조회합니다.
+     * @param requestId 조회할 송금 요청 ID
+     * @return 조회된 송금 요청 정보
+     */
+    Optional<RemittanceRequest> findById(long requestId);
 }

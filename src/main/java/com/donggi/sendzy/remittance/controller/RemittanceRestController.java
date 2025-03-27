@@ -25,6 +25,6 @@ public class RemittanceRestController {
     @PostMapping
     public void remittance(@RequestBody final RemittanceRequest request, @AuthenticationPrincipal final CustomUserDetails userDetails) {
         final var senderId = userDetails.getMemberId();
-        remittanceRequestApplicationService.sendMoney(senderId, request.receiverId(), request.amount());
+        remittanceRequestApplicationService.createRemittanceRequest(senderId, request.receiverId(), request.amount());
     }
 }

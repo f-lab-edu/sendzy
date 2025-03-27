@@ -15,4 +15,12 @@
     <select id="listBySenderId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
         SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE member_id = #{memberId}
     </select>
+
+    <select id="findByRequestId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
+        SELECT id, remittance_request_id, member_id, email, description, amount, balance, created_at FROM remittance_history WHERE remittance_request_id = #{remittanceRequestId}
+    </select>
+
+    <update id="update" parameterType="com.donggi.sendzy.remittance.domain.RemittanceHistory">
+        UPDATE remittance_history SET remittance_request_id = #{remittanceRequestId}, member_id = #{memberId}, email = #{email}, description = #{description}, amount = #{amount}, balance = #{balance}, created_at = #{createdAt} WHERE id = #{id}
+    </update>
 </mapper>

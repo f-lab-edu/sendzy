@@ -36,7 +36,7 @@ public class RemittanceRequestApplicationService {
      * @param amount 송금할 금액
      */
     @Transactional
-    public void sendMoney(final Long senderId, final Long receiverId, final Long amount) {
+    public long createRemittanceRequest(final Long senderId, final Long receiverId, final Long amount) {
         validateSenderAndReceiver(senderId, receiverId);
 
         // 계좌 ID를 오름차순으로 정렬하여 일관된 순서로 Lock 확보
@@ -51,10 +51,10 @@ public class RemittanceRequestApplicationService {
         final var receiver = memberService.findById(receiverAccount.getMemberId());
 
         // 송금 처리
-        processRemittance(sender, receiver, senderAccount, amount);
+        return processRemittance(sender, receiver, senderAccount, amount);
     }
 
-    private void processRemittance(final Member sender, final Member receiver, final Account senderAccount, final Long amount) {
+    private long processRemittance(final Member sender, final Member receiver, final Account senderAccount, final Long amount) {
         // 송금 내역 저장
         final var historyId = recordRemittanceHistory(sender, senderAccount, amount);
 
@@ -69,6 +69,8 @@ public class RemittanceRequestApplicationService {
 
         // 송금자 출금 처리 (홀딩 잔액 업데이트)
         accountService.withdraw(senderAccount, amount);
+
+        return requestId;
     }
 
     private void recordRemittanceStatusHistory(final Member sender, final Member receiver, final Long amount, final Long requestId) {

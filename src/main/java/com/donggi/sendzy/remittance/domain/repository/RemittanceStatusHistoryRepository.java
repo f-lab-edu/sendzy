@@ -19,4 +19,11 @@ public interface RemittanceStatusHistoryRepository {
      * @return 송금 요청 상태 변경 이력
      */
     Optional<RemittanceStatusHistory> findBySenderId(final Long senderId);
+
+    /**
+     * 송금 요청 ID로 송금 이력을 조회합니다.
+     * @param requestId 송금 요청 ID
+     * @return 송금 이력
+     */
+    Optional<RemittanceStatusHistory> findByRequestId(long requestId);
 }

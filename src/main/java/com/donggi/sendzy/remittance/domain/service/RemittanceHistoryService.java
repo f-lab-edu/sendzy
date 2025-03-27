@@ -2,6 +2,7 @@ package com.donggi.sendzy.remittance.domain.service;
 
 import com.donggi.sendzy.remittance.domain.RemittanceHistory;
 import com.donggi.sendzy.remittance.domain.repository.RemittanceHistoryRepository;
+import com.donggi.sendzy.remittance.exception.RemittanceHistoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,20 @@ public class RemittanceHistoryService {
     }
 
     @Transactional
-    public void updateRequestId(final Long historyId, final long requestId) {
+    public void updateRequestId(final long historyId, final long requestId) {
         final var remittanceHistory = remittanceHistoryRepository.findById(historyId);
         remittanceHistory.updateRequestId(requestId);
+        remittanceHistoryRepository.update(remittanceHistory);
     }
 
     @Transactional(readOnly = true)
     public List<RemittanceHistory> listBySenderId(final long senderId) {
         return remittanceHistoryRepository.listBySenderId(senderId);
+    }
+
+    @Transactional(readOnly = true)
+    public RemittanceHistory getByRequestId(final long requestId) {
+        return remittanceHistoryRepository.findByRequestId(requestId)
+            .orElseThrow(RemittanceHistoryNotFoundException::new);
     }
 }

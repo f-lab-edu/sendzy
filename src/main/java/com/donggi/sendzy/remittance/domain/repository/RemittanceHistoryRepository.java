@@ -3,6 +3,7 @@ package com.donggi.sendzy.remittance.domain.repository;
 import com.donggi.sendzy.remittance.domain.RemittanceHistory;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RemittanceHistoryRepository {
 
@@ -26,4 +27,17 @@ public interface RemittanceHistoryRepository {
      * @return 조회된 송금 내역 목록
      */
     List<RemittanceHistory> listBySenderId(final long senderId);
+
+    /**
+     * 송금 요청 ID로 송금 내역을 조회합니다.
+     * @param requestId 송금 요청 ID
+     * @return 조회된 송금 내역
+     */
+    Optional<RemittanceHistory> findByRequestId(final long requestId);
+
+    /**
+     * 송금 내역을 업데이트합니다.
+     * @param remittanceHistory 업데이트할 송금 내역
+     */
+    void update(final RemittanceHistory remittanceHistory);
 }

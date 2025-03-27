@@ -14,5 +14,7 @@ public interface RemittanceRequestMapper extends RemittanceRequestRepository, Te
 
     Optional<RemittanceRequest> findBySenderId(final Long senderId);
 
+    Optional<RemittanceRequest> findById(final long requestId);
+
     void deleteAll();
 }

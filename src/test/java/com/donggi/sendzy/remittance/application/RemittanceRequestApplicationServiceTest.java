@@ -94,7 +94,7 @@ class RemittanceRequestApplicationServiceTest {
 
                 // when, then
                 assertThrows(AccountNotFoundException.class, () -> {
-                    remittanceRequestApplicationService.sendMoney(invalidSenderId, receiverId, 100L);
+                    remittanceRequestApplicationService.createRemittanceRequest(invalidSenderId, receiverId, 100L);
                 });
             }
         }
@@ -108,7 +108,7 @@ class RemittanceRequestApplicationServiceTest {
 
                 // when, then
                 assertThrows(AccountNotFoundException.class, () -> {
-                    remittanceRequestApplicationService.sendMoney(senderId, invalidReceiverId, 100L);
+                    remittanceRequestApplicationService.createRemittanceRequest(senderId, invalidReceiverId, 100L);
                 });
             }
         }
@@ -122,7 +122,7 @@ class RemittanceRequestApplicationServiceTest {
 
                 // when, then
                 assertThrows(InvalidWithdrawalException.class, () -> {
-                    remittanceRequestApplicationService.sendMoney(senderId, receiverId, invalidAmount);
+                    remittanceRequestApplicationService.createRemittanceRequest(senderId, receiverId, invalidAmount);
                 });
             }
         }
@@ -138,7 +138,7 @@ class RemittanceRequestApplicationServiceTest {
 
                 // when & then
                 assertThrows(InvalidWithdrawalException.class, () -> {
-                    remittanceRequestApplicationService.sendMoney(senderId, receiverId, amount + 1);
+                    remittanceRequestApplicationService.createRemittanceRequest(senderId, receiverId, amount + 1);
                 });
             }
         }
@@ -149,7 +149,7 @@ class RemittanceRequestApplicationServiceTest {
             void BadRequestException_예외가_발생한다() {
                 // when, then
                 assertThrows(BadRequestException.class, () -> {
-                    remittanceRequestApplicationService.sendMoney(senderId, senderId, 100L);
+                    remittanceRequestApplicationService.createRemittanceRequest(senderId, senderId, 100L);
                 });
             }
         }
@@ -164,10 +164,10 @@ class RemittanceRequestApplicationServiceTest {
                 accountService.deposit(senderAccount, amount);
 
                 // when
-                remittanceRequestApplicationService.sendMoney(senderId, receiverId, 100L);
+                final var requestId = remittanceRequestApplicationService.createRemittanceRequest(senderId, receiverId, 100L);
 
                 // then
-                final var remittanceHistory = remittanceHistoryService.listBySenderId(senderId);
+                final var remittanceHistory = remittanceHistoryService.getByRequestId(requestId);
                 assertThat(remittanceHistory).isNotNull();
             }
 
@@ -179,10 +179,10 @@ class RemittanceRequestApplicationServiceTest {
                 accountService.deposit(senderAccount, amount);
 
                 // when
-                remittanceRequestApplicationService.sendMoney(senderId, receiverId, 100L);
+                final var requestId = remittanceRequestApplicationService.createRemittanceRequest(senderId, receiverId, 100L);
 
                 // then
-                final var remittanceRequest = remittanceRequestService.findBySenderId(senderId);
+                final var remittanceRequest = remittanceRequestService.getById(requestId);
                 assertThat(remittanceRequest).isNotNull();
             }
 
@@ -194,10 +194,10 @@ class RemittanceRequestApplicationServiceTest {
                 accountService.deposit(senderAccount, amount);
 
                 // when
-                remittanceRequestApplicationService.sendMoney(senderId, receiverId, 100L);
+                final var requestId = remittanceRequestApplicationService.createRemittanceRequest(senderId, receiverId, 100L);
 
                 // then
-                final var remittanceStatusHistory = remittanceStatusHistoryService.findBySenderId(senderId);
+                final var remittanceStatusHistory = remittanceStatusHistoryService.getByRequestId(requestId);
                 assertThat(remittanceStatusHistory).isNotNull();
             }
 
@@ -209,7 +209,7 @@ class RemittanceRequestApplicationServiceTest {
                 accountService.deposit(senderAccount, amount);
 
                 // when
-                remittanceRequestApplicationService.sendMoney(senderId, receiverId, 100L);
+                remittanceRequestApplicationService.createRemittanceRequest(senderId, receiverId, 100L);
 
                 // then
                 final var actual = accountService.getByMemberId(senderId);
