@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS member (
-  `id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `email` varchar(300) NOT NULL UNIQUE,
   `encoded_password` varchar(300) NOT NULL,
   `created_at` datetime NOT NULL
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS remittance_history (
   `id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `remittance_request_id` bigint,
   `member_id` bigint NOT NULL,
-  `email` bigint NOT NULL,
+  `email` varchar(300) NOT NULL,
   `description` varchar(100) NOT NULL,
   `amount` bigint NOT NULL,
   `balance` bigint NOT NULL,
@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS remittance_status_history (
 CREATE TABLE IF NOT EXISTS account (
    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
    `member_id` BIGINT NOT NULL,
-   `balance` BIGINT NOT NULL
+   `balance` BIGINT NOT NULL,
+   `pending_amount` BIGINT NOT NULL
 );
 
 ALTER TABLE remittance_request ADD CONSTRAINT remittance_request_receiver_id_fk FOREIGN KEY (receiver_id) REFERENCES member (id);

@@ -4,16 +4,28 @@
 <mapper namespace="com.donggi.sendzy.account.infrastructure.AccountMapper">
 
     <insert id="create" parameterType="com.donggi.sendzy.account.domain.Account" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO account (member_id, balance)
-        VALUES (#{memberId}, #{balance})
+        INSERT INTO account (member_id, balance, pending_amount)
+        VALUES (#{memberId}, #{balance}, #{pendingAmount})
     </insert>
 
     <select id="findByMemberId" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
-        SELECT id, member_id, balance FROM account WHERE member_id = #{memberId}
+        SELECT id, member_id, balance, pending_amount FROM account WHERE member_id = #{memberId}
     </select>
+
+    <select id="findByIdForUpdate" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
+        SELECT id, member_id, balance, pending_amount FROM account WHERE member_id = #{memberId} FOR UPDATE
+    </select>
+
 
     <delete id="deleteAll">
         DELETE FROM account
     </delete>
 
+    <update id="updatePendingAmount">
+        UPDATE account SET pending_amount = #{pendingAmount} WHERE id = #{id}
+    </update>
+
+    <update id="updateBalance">
+        UPDATE account SET balance = #{balance} WHERE id = #{id}
+    </update>
 </mapper>

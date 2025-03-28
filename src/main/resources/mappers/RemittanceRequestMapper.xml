@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.donggi.sendzy.remittance.infrastructure.RemittanceRequestMapper">
+
+    <insert id="create" parameterType="com.donggi.sendzy.remittance.domain.RemittanceRequest" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO remittance_request (sender_id, receiver_id, status, amount, created_at)
+        VALUES (#{senderId}, #{receiverId}, #{status}, #{amount}, #{createdAt})
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE FROM remittance_request
+    </delete>
+
+    <select id="findById" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE id = #{id}
+    </select>
+</mapper>
