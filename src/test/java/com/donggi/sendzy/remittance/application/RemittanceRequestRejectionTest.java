@@ -135,7 +135,7 @@ public class RemittanceRequestRejectionTest {
                 );
 
                 // then
-                assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 + '" + request.getStatus() +  "'입니다.");
+                assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 '" + request.getStatus() +  "'입니다.");
             }
         }
     }

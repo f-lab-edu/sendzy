@@ -117,7 +117,7 @@ public class RemittanceRequestAcceptanceTest {
                 final var actual = assertThrows(InvalidRemittanceRequestStatusException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId, receiverId));
 
                 // then
-                assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 + '" + status +  "'입니다.");
+                assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 '" + status +  "'입니다.");
             }
         }
 
