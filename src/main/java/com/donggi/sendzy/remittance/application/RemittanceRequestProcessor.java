@@ -1,6 +1,7 @@
 package com.donggi.sendzy.remittance.application;
 
 import com.donggi.sendzy.account.application.AccountLockingService;
+import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
@@ -23,13 +24,7 @@ public class RemittanceRequestProcessor {
     public void handleAcceptance(final long requestId, final long receiverId) {
         // 송금 요청 조회 및 상태 확인 (PENDING 여부)
         final var remittanceRequest = remittanceRequestService.getByIdForUpdate(requestId);
-        if (!remittanceRequest.getReceiverId().equals(receiverId)) {
-            throw new AccessDeniedException("요청 수락 권한이 없습니다.");
-        }
-
-        if (!remittanceRequest.isPending()) {
-            throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
-        }
+        validateReceiverAuthorityAndStatus(remittanceRequest, receiverId);
 
         // 송금자/수신자 계좌 락 + 조회 (ID 오름차순 → 데드락 방지)
         final var accounts = accountLockingService.getAccountsWithLockOrdered(remittanceRequest.getSenderId(), remittanceRequest.getReceiverId());
@@ -44,16 +39,8 @@ public class RemittanceRequestProcessor {
         remittanceRequestService.accept(remittanceRequest);
 
         // 상태 변경 히스토리 저장
-        remittanceStatusHistoryService.recordStatusHistory(
-            new RemittanceStatusHistory(
-                remittanceRequest.getId(),
-                remittanceRequest.getSenderId(),
-                remittanceRequest.getReceiverId(),
-                remittanceRequest.getAmount(),
-                RemittanceRequestStatus.ACCEPTED
-            ));
+        recordStatus(remittanceRequest, RemittanceRequestStatus.ACCEPTED);
     }
-
 
     @Transactional
     public void handleRejection(final long requestId, final long receiverId) {
@@ -61,13 +48,7 @@ public class RemittanceRequestProcessor {
         final var remittanceRequest = remittanceRequestService.getByIdForUpdate(requestId);
 
         // 수신자 권한 확인
-        if (!remittanceRequest.getReceiverId().equals(receiverId)) {
-            throw new AccessDeniedException("송금 요청에 대한 권한이 없습니다.");
-        }
-
-        if (!remittanceRequest.isPending()) {
-            throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
-        }
+        validateReceiverAuthorityAndStatus(remittanceRequest, receiverId);
 
         // 송금자 계좌 롤백 처리
         final var senderAccount = accountLockingService.getByMemberIdForUpdate(remittanceRequest.getSenderId());
@@ -77,13 +58,27 @@ public class RemittanceRequestProcessor {
         remittanceRequestService.reject(remittanceRequest);
 
         // 상태 변경 히스토리 저장
+        recordStatus(remittanceRequest, RemittanceRequestStatus.REJECTED);
+    }
+
+    private void validateReceiverAuthorityAndStatus(final RemittanceRequest remittanceRequest, final long receiverId) {
+        if (!remittanceRequest.getReceiverId().equals(receiverId)) {
+            throw new AccessDeniedException("해당 송금 요청의 수신자만 처리할 수 있습니다.");
+        }
+
+        if (!remittanceRequest.isPending()) {
+            throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
+        }
+    }
+
+    private void recordStatus(RemittanceRequest request, RemittanceRequestStatus status) {
         remittanceStatusHistoryService.recordStatusHistory(
             new RemittanceStatusHistory(
-                remittanceRequest.getId(),
-                remittanceRequest.getSenderId(),
-                remittanceRequest.getReceiverId(),
-                remittanceRequest.getAmount(),
-                RemittanceRequestStatus.REJECTED
+                request.getId(),
+                request.getSenderId(),
+                request.getReceiverId(),
+                request.getAmount(),
+                status
             )
         );
     }

@@ -149,7 +149,7 @@ public class RemittanceRequestAcceptanceTest {
                 );
 
                 // then
-                assertThat(actual.getMessage()).isEqualTo("요청 수락 권한이 없습니다.");
+                assertThat(actual.getMessage()).isEqualTo("해당 송금 요청의 수신자만 처리할 수 있습니다.");
             }
         }
     }

@@ -117,7 +117,7 @@ public class RemittanceRequestRejectionTest {
                 );
 
                 // then
-                assertThat(exception.getMessage()).isEqualTo("송금 요청에 대한 권한이 없습니다.");
+                assertThat(exception.getMessage()).isEqualTo("해당 송금 요청의 수신자만 처리할 수 있습니다.");
             }
         }
 
