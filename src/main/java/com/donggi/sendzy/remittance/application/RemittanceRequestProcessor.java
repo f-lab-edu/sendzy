@@ -7,6 +7,7 @@ import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
 import com.donggi.sendzy.remittance.exception.InvalidRemittanceRequestStatusException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +20,13 @@ public class RemittanceRequestProcessor {
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
 
     @Transactional
-    public void handleAcceptance(final long requestId) {
+    public void handleAcceptance(final long requestId, final long receiverId) {
         // 송금 요청 조회 및 상태 확인 (PENDING 여부)
         final var remittanceRequest = remittanceRequestService.getByIdForUpdate(requestId);
+        if (!remittanceRequest.getReceiverId().equals(receiverId)) {
+            throw new AccessDeniedException("요청 수락 권한이 없습니다.");
+        }
+
         if (!remittanceRequest.isPending()) {
             throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
         }

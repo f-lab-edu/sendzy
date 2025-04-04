@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.AccessDeniedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -51,6 +52,7 @@ public class RemittanceRequestAcceptanceTest {
     private RemittanceRequestProcessor remittanceRequestProcessor;
 
     private Long requestId;
+    private Long receiverId;
 
     @BeforeEach
     void setUp() {
@@ -66,10 +68,12 @@ public class RemittanceRequestAcceptanceTest {
         final var sender = memberService.findByEmail(senderEmail).get();
         final var receiver = memberService.findByEmail(receiverEmail).get();
 
+        receiverId = receiver.getId();
+
         requestId = remittanceRequestService.recordRequestAndGetId(
             new RemittanceRequest(
                 sender.getId(),
-                receiver.getId(),
+                receiverId,
                 RemittanceRequestStatus.PENDING,
                 1000L
             )
@@ -93,7 +97,7 @@ public class RemittanceRequestAcceptanceTest {
                 final long requestId = 999999999999L;
 
                 // when
-                final var actual = assertThrows(RemittanceRequestNotFoundException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId));
+                final var actual = assertThrows(RemittanceRequestNotFoundException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId, receiverId));
 
                 // then
                 assertThat(actual.getMessage()).isEqualTo("송금 요청 정보를 찾을 수 없습니다.");
@@ -110,7 +114,7 @@ public class RemittanceRequestAcceptanceTest {
                 remittanceRequestService.accept(remittanceRequest);
 
                 // when
-                final var actual = assertThrows(InvalidRemittanceRequestStatusException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId));
+                final var actual = assertThrows(InvalidRemittanceRequestStatusException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId, receiverId));
 
                 // then
                 assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 + '" + status +  "'입니다.");
@@ -122,11 +126,30 @@ public class RemittanceRequestAcceptanceTest {
             @Test
             void 송금_요청이_정상적으로_수행된다() {
                 // when
-                remittanceRequestProcessor.handleAcceptance(requestId);
+                remittanceRequestProcessor.handleAcceptance(requestId, receiverId);
 
                 // then
                 final var updated = remittanceRequestService.getById(requestId);
                 assertThat(updated.getStatus()).isEqualTo(RemittanceRequestStatus.ACCEPTED);
+            }
+        }
+
+        @Nested
+        class 수신자가_아닌_사용자가_수락하려는_경우 {
+            @Test
+            void AccessDeniedException_예외가_발생한다() {
+                // given
+                final var notReceiverEmail = "intruder@sendzy.com";
+                signupService.signup(new SignupRequest(notReceiverEmail, TestUtils.DEFAULT_RAW_PASSWORD));
+                final var notReceiver = memberService.findByEmail(notReceiverEmail).get();
+
+                // when
+                final var actual = assertThrows(AccessDeniedException.class, () ->
+                    remittanceRequestProcessor.handleAcceptance(requestId, notReceiver.getId())
+                );
+
+                // then
+                assertThat(actual.getMessage()).isEqualTo("요청 수락 권한이 없습니다.");
             }
         }
     }
