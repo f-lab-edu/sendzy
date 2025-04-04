@@ -19,6 +19,13 @@ public class RemittanceRequestService {
         return remittanceRequest.getId();
     }
 
+    @Transactional
+    public void accept(final RemittanceRequest remittanceRequest) {
+        remittanceRequest.accept();
+
+        remittanceRequestRepository.update(remittanceRequest);
+    }
+
     @Transactional(readOnly = true)
     public RemittanceRequest getById(final long requestId) {
         return remittanceRequestRepository.findById(requestId)

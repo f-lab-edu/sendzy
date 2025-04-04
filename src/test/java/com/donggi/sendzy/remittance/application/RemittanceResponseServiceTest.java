@@ -1,6 +1,5 @@
 package com.donggi.sendzy.remittance.application;
 
-import com.donggi.sendzy.account.domain.AccountService;
 import com.donggi.sendzy.member.TestUtils;
 import com.donggi.sendzy.member.application.SignupService;
 import com.donggi.sendzy.member.domain.MemberService;
@@ -10,6 +9,7 @@ import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.repository.TestRemittanceRequestRepository;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
+import com.donggi.sendzy.remittance.exception.InvalidRemittanceRequestStatusException;
 import com.donggi.sendzy.remittance.exception.RemittanceRequestNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -41,8 +41,17 @@ public class RemittanceResponseServiceTest {
     @Autowired
     private TestMemberRepository memberRepository;
 
+    @Autowired
+    private MemberService memberService;
+
     private void doSomething(final long requestId, final RemittanceRequestStatus status) {
-        remittanceRequestService.getByIdForUpdate(requestId);
+        final var remittanceRequest = remittanceRequestService.getByIdForUpdate(requestId);
+
+        if (!remittanceRequest.isPending()) {
+            throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
+        }
+
+        remittanceRequestService.accept(remittanceRequest);
     }
 
     private Long requestId;
@@ -57,10 +66,13 @@ public class RemittanceResponseServiceTest {
         signupService.signup(new SignupRequest(senderEmail, TestUtils.DEFAULT_RAW_PASSWORD));
         signupService.signup(new SignupRequest(receiverEmail, TestUtils.DEFAULT_RAW_PASSWORD));
 
+        final var sender = memberService.findByEmail(senderEmail).get();
+        final var receiver = memberService.findByEmail(receiverEmail).get();
+
         requestId = remittanceRequestService.recordRequestAndGetId(
             new RemittanceRequest(
-                1L,
-                2L,
+                sender.getId(),
+                receiver.getId(),
                 RemittanceRequestStatus.PENDING,
                 1000L
             )
@@ -72,15 +84,42 @@ public class RemittanceResponseServiceTest {
         @Nested
         class 송금_요청이_존재하지_않을_경우 {
             @Test
-            void RemittanceRequestNotFoundException_예외가_발생한다() {
+            void RemittanceRequestNotFoundException_예외가_반환된다() {
                 // given
                 final long requestId = 999999999999L;
 
                 // when
-                final var exception = assertThrows(RemittanceRequestNotFoundException.class, () -> doSomething(requestId, RemittanceRequestStatus.ACCEPTED));
+                final var actual = assertThrows(RemittanceRequestNotFoundException.class, () -> doSomething(requestId, RemittanceRequestStatus.ACCEPTED));
 
                 // then
-                assertThat(exception.getMessage()).isEqualTo("송금 요청 정보를 찾을 수 없습니다.");
+                assertThat(actual.getMessage()).isEqualTo("송금 요청 정보를 찾을 수 없습니다.");
+            }
+        }
+
+        @Nested
+        class 송금_요청의_상태가_PENDING이_아닐_경우 {
+            @Test
+            void InvalidRemittanceRequestStatusException_예외가_반환된다() {
+                // given
+                final var status = RemittanceRequestStatus.ACCEPTED;
+                final var remittanceRequest = remittanceRequestService.getById(requestId);
+                remittanceRequestService.accept(remittanceRequest);
+
+                // when
+                final var actual = assertThrows(InvalidRemittanceRequestStatusException.class, () -> doSomething(requestId, RemittanceRequestStatus.ACCEPTED));
+
+                // then
+                assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 + '" + status +  "'입니다.");
+            }
+        }
+
+        @Nested
+        class 송금_요청의_상태가_PENDING일_경우 {
+            @Test
+            void 송금_요청이_정상적으로_수행된다() {
+                doSomething(requestId, RemittanceRequestStatus.ACCEPTED);
+                final var updated = remittanceRequestService.getById(requestId);
+                assertThat(updated.getStatus()).isEqualTo(RemittanceRequestStatus.ACCEPTED);
             }
         }
     }

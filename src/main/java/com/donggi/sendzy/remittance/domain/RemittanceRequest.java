@@ -33,4 +33,12 @@ public class RemittanceRequest {
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
     }
+
+    public boolean isPending() {
+        return this.status == RemittanceRequestStatus.PENDING;
+    }
+
+    public void accept() {
+        status = this.status.accept();
+    }
 }

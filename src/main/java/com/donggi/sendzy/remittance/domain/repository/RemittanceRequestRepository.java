@@ -26,4 +26,10 @@ public interface RemittanceRequestRepository {
      * @return 조회된 송금 요청 정보(Optional)
      */
     Optional<RemittanceRequest> findByIdForUpdate(final long requestId);
+
+    /**
+     * 송금 요청 정보를 업데이트합니다.
+     * @param remittanceRequest 업데이트할 송금 요청 정보
+     */
+    void update(final RemittanceRequest remittanceRequest);
 }
