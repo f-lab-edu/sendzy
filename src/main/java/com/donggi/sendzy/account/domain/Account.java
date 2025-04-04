@@ -22,9 +22,14 @@ public class Account {
         this.pendingAmount = 0L;
     }
 
-    public void withdraw(final Long amount) {
+    public void reserveWithdraw(final Long amount) {
         validateWithdraw(amount);
         this.pendingAmount += amount;
+    }
+
+    public void commitWithdraw(final long amount) {
+        this.balance -= amount;
+        this.pendingAmount -= amount;
     }
 
     public void deposit(final Long amount) {

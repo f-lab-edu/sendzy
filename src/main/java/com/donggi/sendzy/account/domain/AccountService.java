@@ -19,7 +19,7 @@ public class AccountService {
 
     @Transactional
     public void withdraw(final Account account, final long amount) {
-        account.withdraw(amount);
+        account.reserveWithdraw(amount);
         accountRepository.updatePendingAmount(account.getId(), account.getPendingAmount());
     }
 
