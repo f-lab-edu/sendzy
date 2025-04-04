@@ -24,4 +24,10 @@ public class RemittanceRequestService {
         return remittanceRequestRepository.findById(requestId)
             .orElseThrow(RemittanceRequestNotFoundException::new);
     }
+
+    @Transactional(readOnly = true)
+    public RemittanceRequest getByIdForUpdate(final long requestId) {
+        return remittanceRequestRepository.findByIdForUpdate(requestId)
+            .orElseThrow(RemittanceRequestNotFoundException::new);
+    }
 }
