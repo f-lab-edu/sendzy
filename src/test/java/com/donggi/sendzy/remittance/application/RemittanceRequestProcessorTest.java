@@ -25,10 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RemittanceResponseServiceTest {
+public class RemittanceRequestProcessorTest {
 
-    // 인증된 사용자의 송금 건의 상태가 PENDING이면서 만료되지 않은 경우, 송금 요청이 수락/거절 처리되고 송금 요청 상태 변경 이력이 기록되어야 함
-    // 송금 건이 수락되면 송금자의 잔액이 차감되어야 하고, 거절되면 송금자의 잔액이 복구되어야 함
     @Autowired
     private RemittanceRequestService remittanceRequestService;
 
@@ -44,15 +42,8 @@ public class RemittanceResponseServiceTest {
     @Autowired
     private MemberService memberService;
 
-    private void doSomething(final long requestId, final RemittanceRequestStatus status) {
-        final var remittanceRequest = remittanceRequestService.getByIdForUpdate(requestId);
-
-        if (!remittanceRequest.isPending()) {
-            throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
-        }
-
-        remittanceRequestService.accept(remittanceRequest);
-    }
+    @Autowired
+    private RemittanceRequestProcessor remittanceRequestProcessor;
 
     private Long requestId;
 
@@ -89,7 +80,7 @@ public class RemittanceResponseServiceTest {
                 final long requestId = 999999999999L;
 
                 // when
-                final var actual = assertThrows(RemittanceRequestNotFoundException.class, () -> doSomething(requestId, RemittanceRequestStatus.ACCEPTED));
+                final var actual = assertThrows(RemittanceRequestNotFoundException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId));
 
                 // then
                 assertThat(actual.getMessage()).isEqualTo("송금 요청 정보를 찾을 수 없습니다.");
@@ -106,7 +97,7 @@ public class RemittanceResponseServiceTest {
                 remittanceRequestService.accept(remittanceRequest);
 
                 // when
-                final var actual = assertThrows(InvalidRemittanceRequestStatusException.class, () -> doSomething(requestId, RemittanceRequestStatus.ACCEPTED));
+                final var actual = assertThrows(InvalidRemittanceRequestStatusException.class, () -> remittanceRequestProcessor.handleAcceptance(requestId));
 
                 // then
                 assertThat(actual.getMessage()).isEqualTo("이미 처리된 송금 요청입니다. 현재 상태는 + '" + status +  "'입니다.");
@@ -117,7 +108,10 @@ public class RemittanceResponseServiceTest {
         class 송금_요청의_상태가_PENDING일_경우 {
             @Test
             void 송금_요청이_정상적으로_수행된다() {
-                doSomething(requestId, RemittanceRequestStatus.ACCEPTED);
+                // when
+                remittanceRequestProcessor.handleAcceptance(requestId);
+
+                // then
                 final var updated = remittanceRequestService.getById(requestId);
                 assertThat(updated.getStatus()).isEqualTo(RemittanceRequestStatus.ACCEPTED);
             }
