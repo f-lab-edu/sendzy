@@ -26,4 +26,15 @@ public class RemittanceRequestRestController {
         final var receiverId = userDetails.getMemberId();
         remittanceRequestProcessor.handleAcceptance(requestId, receiverId);
     }
+
+    /**
+     * 송금 요청 거절
+     * @param requestId 송금 요청 ID
+     * @param userDetails 로그인 정보
+     */
+    @PostMapping("/{requestId}/reject")
+    public void reject(@PathVariable final long requestId, @AuthenticationPrincipal final CustomUserDetails userDetails) {
+        final var receiverId = userDetails.getMemberId();
+        remittanceRequestProcessor.handleRejection(requestId, receiverId);
+    }
 }
