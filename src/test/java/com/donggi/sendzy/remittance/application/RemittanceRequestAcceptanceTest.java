@@ -1,5 +1,6 @@
 package com.donggi.sendzy.remittance.application;
 
+import com.donggi.sendzy.account.domain.TestAccountRepository;
 import com.donggi.sendzy.member.TestUtils;
 import com.donggi.sendzy.member.application.SignupService;
 import com.donggi.sendzy.member.domain.MemberService;
@@ -11,6 +12,7 @@ import com.donggi.sendzy.remittance.domain.repository.TestRemittanceRequestRepos
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.exception.InvalidRemittanceRequestStatusException;
 import com.donggi.sendzy.remittance.exception.RemittanceRequestNotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -25,10 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RemittanceRequestProcessorTest {
+public class RemittanceRequestAcceptanceTest {
 
     @Autowired
-    private RemittanceRequestService remittanceRequestService;
+    private TestMemberRepository memberRepository;
+
+    @Autowired
+    private TestAccountRepository accountRepository;
 
     @Autowired
     private TestRemittanceRequestRepository remittanceRequestRepository;
@@ -37,7 +42,7 @@ public class RemittanceRequestProcessorTest {
     private SignupService signupService;
 
     @Autowired
-    private TestMemberRepository memberRepository;
+    private RemittanceRequestService remittanceRequestService;
 
     @Autowired
     private MemberService memberService;
@@ -50,6 +55,7 @@ public class RemittanceRequestProcessorTest {
     @BeforeEach
     void setUp() {
         remittanceRequestRepository.deleteAll();
+        accountRepository.deleteAll();
         memberRepository.deleteAll();
 
         final var senderEmail = "sender@sendzy.com";
@@ -68,6 +74,13 @@ public class RemittanceRequestProcessorTest {
                 1000L
             )
         );
+    }
+
+    @AfterEach
+    void tearDown() {
+        remittanceRequestRepository.deleteAll();
+        accountRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Nested
