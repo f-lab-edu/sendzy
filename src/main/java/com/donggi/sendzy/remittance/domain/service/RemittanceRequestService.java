@@ -22,7 +22,12 @@ public class RemittanceRequestService {
     @Transactional
     public void accept(final RemittanceRequest remittanceRequest) {
         remittanceRequest.accept();
+        remittanceRequestRepository.update(remittanceRequest);
+    }
 
+    @Transactional
+    public void reject(final RemittanceRequest remittanceRequest) {
+        remittanceRequest.reject();
         remittanceRequestRepository.update(remittanceRequest);
     }
 

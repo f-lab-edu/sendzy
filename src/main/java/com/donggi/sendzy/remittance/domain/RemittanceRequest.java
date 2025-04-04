@@ -41,4 +41,8 @@ public class RemittanceRequest {
     public void accept() {
         status = this.status.accept();
     }
+
+    public void reject() {
+        status = this.status.reject();
+    }
 }

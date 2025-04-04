@@ -28,9 +28,20 @@ public class AccountLockingService {
     public List<Account> getAccountsWithLockOrdered(final long accountId1, final long accountId2) {
         List<Long> sortedIds = getSortedIds(accountId1, accountId2);
         return sortedIds.stream()
-            .map(accountId -> accountRepository.findByIdForUpdate(accountId)
+            .map(accountId -> accountRepository.findByMemberIdForUpdate(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(accountId)))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 회원 ID로 계좌를 조회하고 해당 계좌의 락을 획득합니다.
+     * @param senderId 송신자 ID
+     * @return 조회된 계좌
+     */
+    @Transactional(readOnly = true)
+    public Account getByMemberIdForUpdate(final long senderId) {
+        return accountRepository.findByMemberIdForUpdate(senderId)
+            .orElseThrow(() -> new AccountNotFoundException(senderId));
     }
 
     private List<Long> getSortedIds(final long senderId, final long receiverId) {

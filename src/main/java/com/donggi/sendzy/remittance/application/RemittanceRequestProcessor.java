@@ -55,10 +55,38 @@ public class RemittanceRequestProcessor {
     }
 
 
-    public void handleRejection() {
-        // 요청 거절
-    }
+    @Transactional
+    public void handleRejection(final long requestId, final long receiverId) {
+        // 송금 요청 조회 (락 획득)
+        final var remittanceRequest = remittanceRequestService.getByIdForUpdate(requestId);
 
+        // 수신자 권한 확인
+        if (!remittanceRequest.getReceiverId().equals(receiverId)) {
+            throw new AccessDeniedException("송금 요청에 대한 권한이 없습니다.");
+        }
+
+        if (!remittanceRequest.isPending()) {
+            throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
+        }
+
+        // 송금자 계좌 롤백 처리
+        final var senderAccount = accountLockingService.getByMemberIdForUpdate(remittanceRequest.getSenderId());
+        senderAccount.cancelWithdraw(remittanceRequest.getAmount());
+
+        // 송금 요청 상태 변경 → REJECTED
+        remittanceRequestService.reject(remittanceRequest);
+
+        // 상태 변경 히스토리 저장
+        remittanceStatusHistoryService.recordStatusHistory(
+            new RemittanceStatusHistory(
+                remittanceRequest.getId(),
+                remittanceRequest.getSenderId(),
+                remittanceRequest.getReceiverId(),
+                remittanceRequest.getAmount(),
+                RemittanceRequestStatus.REJECTED
+            )
+        );
+    }
 
     public void handleExpiration() {
         // 요청 만료

@@ -32,6 +32,10 @@ public class Account {
         this.pendingAmount -= amount;
     }
 
+    public void cancelWithdraw(final long amount) {
+        this.pendingAmount -= amount;
+    }
+
     public void deposit(final Long amount) {
         final var fieldName = "amount";
         Validator.notNull(amount, fieldName);

@@ -16,26 +16,18 @@ public interface AccountRepository {
      * @param memberId 회원 ID
      * @return 조회된 계좌
      */
-    Optional<Account> findByMemberId(final Long memberId);
+    Optional<Account> findByMemberId(final long memberId);
 
     /**
      * 회원 ID로 계좌를 조회하고, 조회된 계좌에 배타적 잠금(Exclusive Lock)을 겁니다.
      * @param memberId 회원 ID
      * @return 잠금이 설정된 계좌(Optional)
      */
-    Optional<Account> findByIdForUpdate(final Long memberId);
+    Optional<Account> findByMemberIdForUpdate(final long memberId);
 
     /**
-     * 계좌의 대기 중인 금액을 업데이트합니다.
-     * @param id 계좌 ID
-     * @param pendingAmount 대기 중인 금액
+     * 계좌를 업데이트합니다.
+     * @param account 업데이트할 계좌
      */
-    void updatePendingAmount(final Long id, final Long pendingAmount);
-
-    /**
-     * 계좌의 잔액을 업데이트합니다.
-     * @param id 계좌 ID
-     * @param balance 잔액
-     */
-    void updateBalance(final Long id, final Long balance);
+    void update(final Account account);
 }

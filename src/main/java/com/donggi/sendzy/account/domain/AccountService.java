@@ -20,18 +20,12 @@ public class AccountService {
     @Transactional
     public void withdraw(final Account account, final long amount) {
         account.reserveWithdraw(amount);
-        accountRepository.updatePendingAmount(account.getId(), account.getPendingAmount());
+        accountRepository.update(account);
     }
 
     @Transactional
     public void deposit(final Account account, final long amount) {
         account.deposit(amount);
-        accountRepository.updateBalance(account.getId(), account.getBalance());
-    }
-
-    @Transactional(readOnly = true)
-    public Account getByIdForUpdate(final long memberId) {
-        return accountRepository.findByIdForUpdate(memberId)
-            .orElseThrow(() -> new AccountNotFoundException(memberId));
+        accountRepository.update(account);
     }
 }
