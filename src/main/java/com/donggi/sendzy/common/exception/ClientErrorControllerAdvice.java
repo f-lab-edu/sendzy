@@ -3,7 +3,7 @@ package com.donggi.sendzy.common.exception;
 import com.donggi.sendzy.account.exception.InvalidWithdrawalException;
 import com.donggi.sendzy.member.exception.EmailDuplicatedException;
 import com.donggi.sendzy.member.exception.InvalidPasswordException;
-import com.donggi.sendzy.member.exception.MemberNotFoundException;
+import com.donggi.sendzy.remittance.exception.InvalidRemittanceRequestStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.AccessDeniedException;
@@ -84,5 +84,13 @@ public class ClientErrorControllerAdvice {
     @ExceptionHandler(BadRequestException.class)
     public ProblemDetail handleBadRequestException(final BadRequestException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
+     * 송금 요청이 수락 또는 거절 가능한 상태가 아닌 경우
+     */
+    @ExceptionHandler(InvalidRemittanceRequestStatusException.class)
+    public ProblemDetail handleInvalidRemittanceRequestStatusException(final InvalidRemittanceRequestStatusException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
     }
 }
