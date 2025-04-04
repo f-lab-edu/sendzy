@@ -22,7 +22,7 @@ public class RemittanceRequestRestController {
      * @param userDetails 로그인 정보
      */
     @PostMapping("/{requestId}/accept")
-    public void accept(@PathVariable final long requestId, @AuthenticationPrincipal final CustomUserDetails userDetails) {
+    public void accept(@PathVariable("requestId") final long requestId, @AuthenticationPrincipal final CustomUserDetails userDetails) {
         final var receiverId = userDetails.getMemberId();
         remittanceRequestProcessor.handleAcceptance(requestId, receiverId);
     }
@@ -33,7 +33,7 @@ public class RemittanceRequestRestController {
      * @param userDetails 로그인 정보
      */
     @PostMapping("/{requestId}/reject")
-    public void reject(@PathVariable final long requestId, @AuthenticationPrincipal final CustomUserDetails userDetails) {
+    public void reject(@PathVariable("requestId") final long requestId, @AuthenticationPrincipal final CustomUserDetails userDetails) {
         final var receiverId = userDetails.getMemberId();
         remittanceRequestProcessor.handleRejection(requestId, receiverId);
     }

@@ -1,6 +1,7 @@
 package com.donggi.sendzy.remittance.application;
 
 import com.donggi.sendzy.account.application.AccountLockingService;
+import com.donggi.sendzy.account.domain.AccountService;
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
@@ -19,6 +20,7 @@ public class RemittanceRequestProcessor {
     private final RemittanceRequestService remittanceRequestService;
     private final AccountLockingService accountLockingService;
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
+    private final AccountService accountService;
 
     @Transactional
     public void handleAcceptance(final long requestId, final long receiverId) {
@@ -31,9 +33,8 @@ public class RemittanceRequestProcessor {
         final var senderAccount = remittanceRequest.getSenderId().equals(accounts.get(0).getMemberId()) ? accounts.get(0) : accounts.get(1);
         final var receiverAccount = remittanceRequest.getReceiverId().equals(accounts.get(0).getMemberId()) ? accounts.get(0) : accounts.get(1);
 
-        // 출금/입금 처리
-        senderAccount.commitWithdraw(remittanceRequest.getAmount());
-        receiverAccount.deposit(remittanceRequest.getAmount());
+        // 이체 처리
+        accountService.transfer(senderAccount, receiverAccount, remittanceRequest.getAmount());
 
         // 송금 요청 상태 변경 → ACCEPTED
         remittanceRequestService.accept(remittanceRequest);
@@ -53,6 +54,7 @@ public class RemittanceRequestProcessor {
         // 송금자 계좌 롤백 처리
         final var senderAccount = accountLockingService.getByMemberIdForUpdate(remittanceRequest.getSenderId());
         senderAccount.cancelWithdraw(remittanceRequest.getAmount());
+        accountService.update(senderAccount);
 
         // 송금 요청 상태 변경 → REJECTED
         remittanceRequestService.reject(remittanceRequest);

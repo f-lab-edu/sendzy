@@ -28,4 +28,17 @@ public class AccountService {
         account.deposit(amount);
         accountRepository.update(account);
     }
+
+    @Transactional
+    public void transfer(final Account sender, final Account receiver, final long amount) {
+        sender.commitWithdraw(amount);
+        receiver.deposit(amount);
+        accountRepository.update(sender);
+        accountRepository.update(receiver);
+    }
+
+    @Transactional
+    public void update(final Account account) {
+        accountRepository.update(account);
+    }
 }
