@@ -24,7 +24,7 @@ public class AccountLockingService {
      * @param accountId2 두 번째 계좌 ID
      * @return ID 오름차순으로 정렬된 두 계좌 목록
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Account> getAccountsWithLockOrdered(final long accountId1, final long accountId2) {
         List<Long> sortedIds = getSortedIds(accountId1, accountId2);
         return sortedIds.stream()
@@ -38,7 +38,7 @@ public class AccountLockingService {
      * @param senderId 송신자 ID
      * @return 조회된 계좌
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Account getByMemberIdForUpdate(final long senderId) {
         return accountRepository.findByMemberIdForUpdate(senderId)
             .orElseThrow(() -> new AccountNotFoundException(senderId));
