@@ -2,6 +2,7 @@ package com.donggi.sendzy.remittance.application;
 
 import com.donggi.sendzy.account.application.AccountLockingService;
 import com.donggi.sendzy.account.domain.AccountService;
+import com.donggi.sendzy.account.domain.LockedAccounts;
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
@@ -29,9 +30,9 @@ public class RemittanceRequestProcessor {
         validateReceiverAuthorityAndStatus(remittanceRequest, receiverId);
 
         // 송금자/수신자 계좌 락 + 조회 (ID 오름차순 → 데드락 방지)
-        final var accounts = accountLockingService.getAccountsWithLockOrdered(remittanceRequest.getSenderId(), remittanceRequest.getReceiverId());
-        final var senderAccount = remittanceRequest.getSenderId().equals(accounts.get(0).getMemberId()) ? accounts.get(0) : accounts.get(1);
-        final var receiverAccount = remittanceRequest.getReceiverId().equals(accounts.get(0).getMemberId()) ? accounts.get(0) : accounts.get(1);
+        final LockedAccounts lockedAccounts = accountLockingService.getAccountsWithLockOrdered(remittanceRequest.getSenderId(), remittanceRequest.getReceiverId());
+        final var senderAccount = lockedAccounts.senderAccount();
+        final var receiverAccount = lockedAccounts.receiverAccount();
 
         // 이체 처리
         accountService.transfer(senderAccount, receiverAccount, remittanceRequest.getAmount());

@@ -2,13 +2,13 @@ package com.donggi.sendzy.account.application;
 
 import com.donggi.sendzy.account.domain.Account;
 import com.donggi.sendzy.account.domain.AccountRepository;
+import com.donggi.sendzy.account.domain.LockedAccounts;
 import com.donggi.sendzy.account.exception.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -20,17 +20,19 @@ public class AccountLockingService {
     /**
      * 두 개의 계좌를 계좌 ID 기준으로 오름차순 정렬하여 락을 획득합니다.
      * 데드락을 방지하기 위해 항상 일정한 순서로 락을 획득합니다.
-     * @param accountId1 첫 번째 계좌 ID
-     * @param accountId2 두 번째 계좌 ID
-     * @return ID 오름차순으로 정렬된 두 계좌 목록
+     * @param senderId 송금 회원 ID
+     * @param receiverId 수신 회원 ID
+     * @return 락을 획득한 계좌 목록
      */
     @Transactional
-    public List<Account> getAccountsWithLockOrdered(final long accountId1, final long accountId2) {
-        List<Long> sortedIds = getSortedIds(accountId1, accountId2);
-        return sortedIds.stream()
+    public LockedAccounts getAccountsWithLockOrdered(final long senderId, final long receiverId) {
+        final List<Long> sortedIds = getSortedIds(senderId, receiverId);
+        final List<Account> lockedAccounts = sortedIds.stream()
             .map(accountId -> accountRepository.findByMemberIdForUpdate(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(accountId)))
-            .collect(Collectors.toList());
+            .toList();
+
+        return LockedAccounts.of(lockedAccounts, senderId, receiverId);
     }
 
     /**
