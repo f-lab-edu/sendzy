@@ -84,8 +84,4 @@ public class RemittanceRequestProcessor {
             )
         );
     }
-
-    public void handleExpiration() {
-        // 요청 만료
-    }
 }
