@@ -12,7 +12,7 @@
         SELECT id, member_id, balance, pending_amount FROM account WHERE member_id = #{memberId}
     </select>
 
-    <select id="findByIdForUpdate" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
+    <select id="findByMemberIdForUpdate" parameterType="long" resultType="com.donggi.sendzy.account.domain.Account">
         SELECT id, member_id, balance, pending_amount FROM account WHERE member_id = #{memberId} FOR UPDATE
     </select>
 
@@ -21,11 +21,9 @@
         DELETE FROM account
     </delete>
 
-    <update id="updatePendingAmount">
-        UPDATE account SET pending_amount = #{pendingAmount} WHERE id = #{id}
-    </update>
-
-    <update id="updateBalance">
-        UPDATE account SET balance = #{balance} WHERE id = #{id}
+    <update id="update" parameterType="com.donggi.sendzy.account.domain.Account">
+        UPDATE account
+        SET member_id = #{memberId}, balance = #{balance}, pending_amount = #{pendingAmount}
+        WHERE id = #{id}
     </update>
 </mapper>

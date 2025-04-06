@@ -1,7 +1,9 @@
 package com.donggi.sendzy.remittance.application;
 
+import com.donggi.sendzy.account.application.AccountLockingService;
 import com.donggi.sendzy.account.domain.Account;
 import com.donggi.sendzy.account.domain.AccountService;
+import com.donggi.sendzy.account.domain.LockedAccounts;
 import com.donggi.sendzy.common.exception.BadRequestException;
 import com.donggi.sendzy.member.domain.Member;
 import com.donggi.sendzy.member.domain.MemberService;
@@ -16,14 +18,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 @Service
 @RequiredArgsConstructor
 public class RemittanceRequestApplicationService {
 
     private final AccountService accountService;
+    private final AccountLockingService accountLockingService;
     private final RemittanceHistoryService remittanceHistoryService;
     private final RemittanceRequestService remittanceRequestService;
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
@@ -40,12 +40,9 @@ public class RemittanceRequestApplicationService {
         validateSenderAndReceiver(senderId, receiverId);
 
         // 계좌 ID를 오름차순으로 정렬하여 일관된 순서로 Lock 확보
-        List<Long> sortedIds = getSortedIds(senderId, receiverId);
-        final Account firstAccount = accountService.getByIdForUpdate(sortedIds.get(0));
-        final Account secondAccount = accountService.getByIdForUpdate(sortedIds.get(1));
-
-        final Account senderAccount = senderId.equals(firstAccount.getMemberId()) ? firstAccount : secondAccount;
-        final Account receiverAccount = receiverId.equals(firstAccount.getMemberId()) ? firstAccount : secondAccount;
+        final LockedAccounts lockedAccounts = accountLockingService.getAccountsWithLockOrdered(senderId, receiverId);
+        final Account senderAccount = lockedAccounts.senderAccount();
+        final Account receiverAccount = lockedAccounts.receiverAccount();
 
         final var sender = memberService.findById(senderAccount.getMemberId());
         final var receiver = memberService.findById(receiverAccount.getMemberId());
@@ -111,11 +108,5 @@ public class RemittanceRequestApplicationService {
         if (senderId.equals(receiverId)) {
             throw new BadRequestException("송금자와 수신자가 동일합니다.");
         }
-    }
-
-    private List<Long> getSortedIds(final Long senderId, final Long receiverId) {
-        return Stream.of(senderId, receiverId)
-            .sorted()
-            .toList();
     }
 }

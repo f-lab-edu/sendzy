@@ -84,7 +84,7 @@ public class AccountTest {
                 final var account = new Account(memberId);
 
                 // when & then
-                assertThatThrownBy(() -> account.withdraw(null))
+                assertThatThrownBy(() -> account.reserveWithdraw(null))
                     .isInstanceOf(ValidException.class)
                     .hasMessage("amount 은/는 null이 될 수 없습니다.");
             }
@@ -97,7 +97,7 @@ public class AccountTest {
                 final var amount = -1L;
 
                 // when & then
-                assertThatThrownBy(() -> account.withdraw(amount))
+                assertThatThrownBy(() -> account.reserveWithdraw(amount))
                     .isInstanceOf(InvalidWithdrawalException.class)
                     .hasMessage("송금액은 0원 이상이어야 합니다. 사용자 요청 금액: -1");
             }
@@ -110,7 +110,7 @@ public class AccountTest {
                 final var amount = 0L;
 
                 // when & then
-                assertThatThrownBy(() -> account.withdraw(amount))
+                assertThatThrownBy(() -> account.reserveWithdraw(amount))
                     .isInstanceOf(InvalidWithdrawalException.class)
                     .hasMessage("송금액은 0원 이상이어야 합니다. 사용자 요청 금액: 0");
             }
@@ -123,7 +123,7 @@ public class AccountTest {
                 final var amount = 100L;
 
                 // when & then
-                assertThatThrownBy(() -> account.withdraw(amount))
+                assertThatThrownBy(() -> account.reserveWithdraw(amount))
                     .isInstanceOf(InvalidWithdrawalException.class)
                     .hasMessage("잔액이 부족합니다.");
             }
@@ -138,7 +138,7 @@ public class AccountTest {
                 account.deposit(depositAmount);
 
                 // when
-                account.withdraw(withdrawAmount);
+                account.reserveWithdraw(withdrawAmount);
 
                 // then
                 assertThat(account.getPendingAmount()).isEqualTo(withdrawAmount);

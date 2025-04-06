@@ -19,9 +19,27 @@ public class RemittanceRequestService {
         return remittanceRequest.getId();
     }
 
+    @Transactional
+    public void accept(final RemittanceRequest remittanceRequest) {
+        remittanceRequest.accept();
+        remittanceRequestRepository.update(remittanceRequest);
+    }
+
+    @Transactional
+    public void reject(final RemittanceRequest remittanceRequest) {
+        remittanceRequest.reject();
+        remittanceRequestRepository.update(remittanceRequest);
+    }
+
     @Transactional(readOnly = true)
     public RemittanceRequest getById(final long requestId) {
         return remittanceRequestRepository.findById(requestId)
+            .orElseThrow(RemittanceRequestNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public RemittanceRequest getByIdForUpdate(final long requestId) {
+        return remittanceRequestRepository.findByIdForUpdate(requestId)
             .orElseThrow(RemittanceRequestNotFoundException::new);
     }
 }

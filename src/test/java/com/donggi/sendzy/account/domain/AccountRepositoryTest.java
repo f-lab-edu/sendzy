@@ -46,7 +46,7 @@ public class AccountRepositoryTest {
         final var memberId = TestUtils.DEFAULT_MEMBER_ID;
 
         // when
-        final var actual = accountRepository.findByIdForUpdate(memberId).get();
+        final var actual = accountRepository.findByMemberIdForUpdate(memberId).get();
 
         // then
         assertThat(actual.getMemberId()).isEqualTo(memberId);

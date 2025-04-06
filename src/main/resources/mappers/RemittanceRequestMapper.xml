@@ -12,7 +12,17 @@
         DELETE FROM remittance_request
     </delete>
 
+    <update id="update" parameterType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        UPDATE remittance_request
+        SET sender_id = #{senderId}, receiver_id = #{receiverId}, status = #{status}, amount = #{amount}, created_at = #{createdAt}
+        WHERE id = #{id}
+    </update>
+
     <select id="findById" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
         SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE id = #{id}
+    </select>
+
+    <select id="findByIdForUpdate" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE id = #{id} FOR UPDATE
     </select>
 </mapper>
