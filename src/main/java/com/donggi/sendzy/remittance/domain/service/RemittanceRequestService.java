@@ -31,6 +31,12 @@ public class RemittanceRequestService {
         remittanceRequestRepository.update(remittanceRequest);
     }
 
+    @Transactional
+    public void expire(final RemittanceRequest remittanceRequest) {
+        remittanceRequest.expire();
+        remittanceRequestRepository.update(remittanceRequest);
+    }
+
     @Transactional(readOnly = true)
     public RemittanceRequest getById(final long requestId) {
         return remittanceRequestRepository.findById(requestId)

@@ -8,11 +8,14 @@ import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
+import com.donggi.sendzy.remittance.exception.ExpiredRemittanceRequestException;
 import com.donggi.sendzy.remittance.exception.InvalidRemittanceRequestStatusException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -22,6 +25,7 @@ public class RemittanceRequestProcessor {
     private final AccountLockingService accountLockingService;
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
     private final AccountService accountService;
+    private final RemittanceExpirationService remittanceExpirationService;
 
     @Transactional
     public void handleAcceptance(final long requestId, final long receiverId) {
@@ -41,7 +45,7 @@ public class RemittanceRequestProcessor {
         remittanceRequestService.accept(remittanceRequest);
 
         // 상태 변경 히스토리 저장
-        recordStatus(remittanceRequest, RemittanceRequestStatus.ACCEPTED);
+        recordStatusHistory(remittanceRequest, RemittanceRequestStatus.ACCEPTED);
     }
 
     @Transactional
@@ -61,20 +65,28 @@ public class RemittanceRequestProcessor {
         remittanceRequestService.reject(remittanceRequest);
 
         // 상태 변경 히스토리 저장
-        recordStatus(remittanceRequest, RemittanceRequestStatus.REJECTED);
+        recordStatusHistory(remittanceRequest, RemittanceRequestStatus.REJECTED);
     }
 
     private void validateReceiverAuthorityAndStatus(final RemittanceRequest remittanceRequest, final long receiverId) {
+        // 수신자 권한 확인
         if (!remittanceRequest.getReceiverId().equals(receiverId)) {
             throw new AccessDeniedException("해당 송금 요청의 수신자만 처리할 수 있습니다.");
         }
 
+        // 송금 요청 상태 확인
         if (!remittanceRequest.isPending()) {
             throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
         }
+
+        // 송금 요청 만료 확인
+        if (remittanceRequest.isExpired(LocalDateTime.now())) {
+            remittanceExpirationService.expireRequest(remittanceRequest);
+            throw new ExpiredRemittanceRequestException();
+        }
     }
 
-    private void recordStatus(RemittanceRequest request, RemittanceRequestStatus status) {
+    private void recordStatusHistory(final RemittanceRequest request, final RemittanceRequestStatus status) {
         remittanceStatusHistoryService.recordStatusHistory(
             new RemittanceStatusHistory(
                 request.getId(),

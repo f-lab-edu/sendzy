@@ -3,6 +3,7 @@ package com.donggi.sendzy.common.exception;
 import com.donggi.sendzy.account.exception.InvalidWithdrawalException;
 import com.donggi.sendzy.member.exception.EmailDuplicatedException;
 import com.donggi.sendzy.member.exception.InvalidPasswordException;
+import com.donggi.sendzy.remittance.exception.ExpiredRemittanceRequestException;
 import com.donggi.sendzy.remittance.exception.InvalidRemittanceRequestStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -91,6 +92,14 @@ public class ClientErrorControllerAdvice {
      */
     @ExceptionHandler(InvalidRemittanceRequestStatusException.class)
     public ProblemDetail handleInvalidRemittanceRequestStatusException(final InvalidRemittanceRequestStatusException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    /**
+     * 송금 요청이 만료된 경우
+     */
+    @ExceptionHandler(ExpiredRemittanceRequestException.class)
+    public ProblemDetail handleExpiredRemittanceRequestException(final ExpiredRemittanceRequestException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
     }
 }
