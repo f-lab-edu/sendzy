@@ -57,15 +57,18 @@ public class RemittanceRequestProcessor {
         validateReceiverAuthorityAndStatus(remittanceRequest, receiverId);
 
         // 송금자 계좌 롤백 처리
-        final var senderAccount = accountLockingService.getByMemberIdForUpdate(remittanceRequest.getSenderId());
-        senderAccount.cancelWithdraw(remittanceRequest.getAmount());
-        accountService.update(senderAccount);
+        rollbackHoldAmount(remittanceRequest.getSenderId(), remittanceRequest.getAmount());
 
         // 송금 요청 상태 변경 → REJECTED
         remittanceRequestService.reject(remittanceRequest);
 
         // 상태 변경 히스토리 저장
         recordStatusHistory(remittanceRequest, RemittanceRequestStatus.REJECTED);
+    }
+
+    private void rollbackHoldAmount(final long senderId, final long amount) {
+        final var senderAccount = accountLockingService.getByMemberIdForUpdate(senderId);
+        accountService.cancelWithdraw(senderAccount, amount);
     }
 
     private void validateReceiverAuthorityAndStatus(final RemittanceRequest remittanceRequest, final long receiverId) {
