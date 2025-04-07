@@ -92,6 +92,7 @@ public class RemittanceRequestProcessor {
     private void checkExpiration(final RemittanceRequest remittanceRequest) {
         if (remittanceRequest.isExpired(LocalDateTime.now())) {
             remittanceExpirationService.expireRequest(remittanceRequest);
+            rollbackHoldAmount(remittanceRequest.getSenderId(), remittanceRequest.getAmount());
             throw new ExpiredRemittanceRequestException();
         }
     }
