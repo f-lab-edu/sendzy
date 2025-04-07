@@ -69,17 +69,24 @@ public class RemittanceRequestProcessor {
     }
 
     private void validateReceiverAuthorityAndStatus(final RemittanceRequest remittanceRequest, final long receiverId) {
-        // 수신자 권한 확인
+        validateReceiverAuthority(remittanceRequest, receiverId);
+        validateStatus(remittanceRequest);
+        checkExpiration(remittanceRequest);
+    }
+
+    private void validateReceiverAuthority(final RemittanceRequest remittanceRequest, final long receiverId) {
         if (!remittanceRequest.getReceiverId().equals(receiverId)) {
             throw new AccessDeniedException("해당 송금 요청의 수신자만 처리할 수 있습니다.");
         }
+    }
 
-        // 송금 요청 상태 확인
+    private void validateStatus(final RemittanceRequest remittanceRequest) {
         if (!remittanceRequest.isPending()) {
             throw new InvalidRemittanceRequestStatusException(remittanceRequest.getStatus());
         }
+    }
 
-        // 송금 요청 만료 확인
+    private void checkExpiration(final RemittanceRequest remittanceRequest) {
         if (remittanceRequest.isExpired(LocalDateTime.now())) {
             remittanceExpirationService.expireRequest(remittanceRequest);
             throw new ExpiredRemittanceRequestException();
