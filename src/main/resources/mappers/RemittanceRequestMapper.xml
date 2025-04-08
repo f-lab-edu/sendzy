@@ -25,4 +25,8 @@
     <select id="findByIdForUpdate" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
         SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE id = #{id} FOR UPDATE
     </select>
+
+    <select id="findPendingRequests" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE status = 'PENDING'
+    </select>
 </mapper>
