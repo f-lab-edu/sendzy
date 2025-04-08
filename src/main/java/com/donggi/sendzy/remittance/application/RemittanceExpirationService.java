@@ -1,5 +1,7 @@
 package com.donggi.sendzy.remittance.application;
 
+import com.donggi.sendzy.account.application.AccountLockingService;
+import com.donggi.sendzy.account.domain.AccountService;
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
@@ -16,6 +18,8 @@ public class RemittanceExpirationService {
 
     private final RemittanceRequestService remittanceRequestService;
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
+    private final AccountLockingService accountLockingService;
+    private final AccountService accountService;
 
     /**
      * 송금 요청 만료 처리 (REQUIRES_NEW 트랜잭션)
@@ -30,9 +34,12 @@ public class RemittanceExpirationService {
      * @param remittanceRequest 만료 처리할 송금 요청
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void expireRequest(RemittanceRequest remittanceRequest) {
+    public void expireRequest(final RemittanceRequest remittanceRequest) {
         // 송금 요청 상태 변경 → EXPIRED
         remittanceRequestService.expire(remittanceRequest);
+
+        // 송금자 계좌 롤백 처리
+        rollbackHoldAmount(remittanceRequest.getSenderId(), remittanceRequest.getAmount());
 
         // 히스토리 저장
         recordStatusHistory(remittanceRequest);
@@ -48,5 +55,10 @@ public class RemittanceExpirationService {
                 RemittanceRequestStatus.EXPIRED
             )
         );
+    }
+
+    private void rollbackHoldAmount(final long senderId, final long amount) {
+        final var senderAccount = accountLockingService.getByMemberIdForUpdate(senderId);
+        accountService.cancelWithdraw(senderAccount, amount);
     }
 }

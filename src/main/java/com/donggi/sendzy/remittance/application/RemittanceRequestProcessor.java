@@ -22,10 +22,10 @@ import java.time.LocalDateTime;
 public class RemittanceRequestProcessor {
 
     private final RemittanceRequestService remittanceRequestService;
-    private final AccountLockingService accountLockingService;
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
-    private final AccountService accountService;
     private final RemittanceExpirationService remittanceExpirationService;
+    private final AccountLockingService accountLockingService;
+    private final AccountService accountService;
 
     @Transactional
     public void handleAcceptance(final long requestId, final long receiverId) {
@@ -92,7 +92,6 @@ public class RemittanceRequestProcessor {
     private void checkExpiration(final RemittanceRequest remittanceRequest) {
         if (remittanceRequest.isExpired(LocalDateTime.now())) {
             remittanceExpirationService.expireRequest(remittanceRequest);
-            rollbackHoldAmount(remittanceRequest.getSenderId(), remittanceRequest.getAmount());
             throw new ExpiredRemittanceRequestException();
         }
     }
