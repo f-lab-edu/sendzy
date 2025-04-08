@@ -2,6 +2,7 @@ package com.donggi.sendzy.remittance.domain.repository;
 
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RemittanceRequestRepository {
@@ -32,4 +33,10 @@ public interface RemittanceRequestRepository {
      * @param remittanceRequest 업데이트할 송금 요청 정보
      */
     void update(final RemittanceRequest remittanceRequest);
+
+    /**
+     * PENDING 상태의 요청 목록을 조회합니다.
+     * @return 조회된 송금 요청 목록
+     */
+    List<RemittanceRequest> findPendingRequests();
 }

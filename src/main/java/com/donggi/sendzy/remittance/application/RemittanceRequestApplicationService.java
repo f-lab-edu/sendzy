@@ -14,6 +14,7 @@ import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.service.RemittanceHistoryService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
+import com.donggi.sendzy.remittance.infrastructure.expiration.ExpirationQueueManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RemittanceRequestApplicationService {
 
+    private final RemittanceRequestService remittanceRequestService;
+    private final RemittanceHistoryService remittanceHistoryService;
+    private final RemittanceStatusHistoryService remittanceStatusHistoryService;
+    private final ExpirationQueueManager expirationQueueManager;
     private final AccountService accountService;
     private final AccountLockingService accountLockingService;
-    private final RemittanceHistoryService remittanceHistoryService;
-    private final RemittanceRequestService remittanceRequestService;
-    private final RemittanceStatusHistoryService remittanceStatusHistoryService;
     private final MemberService memberService;
 
     /**
@@ -80,18 +82,13 @@ public class RemittanceRequestApplicationService {
         ));
     }
 
-    private Long recordRemittanceRequest(final Member sender, final Member receiver, final Long amount) {
-        return remittanceRequestService.recordRequestAndGetId(
-            new RemittanceRequest(
-                sender.getId(),
-                receiver.getId(),
-                RemittanceRequestStatus.PENDING,
-                amount
-            )
-        );
+    private long recordRemittanceRequest(final Member sender, final Member receiver, final Long amount) {
+        final var request = new RemittanceRequest(sender.getId(), receiver.getId(), RemittanceRequestStatus.PENDING, amount);
+        expirationQueueManager.register(request);
+        return remittanceRequestService.recordRequestAndGetId(request);
     }
 
-    private Long recordRemittanceHistory(final Member sender, final Account senderAccount, final Long amount) {
+    private long recordRemittanceHistory(final Member sender, final Account senderAccount, final Long amount) {
         return remittanceHistoryService.recordHistoryAndGetId(
             new RemittanceHistory(
                 null,

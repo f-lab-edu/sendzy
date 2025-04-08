@@ -11,6 +11,11 @@ public enum RemittanceRequestStatus {
         public RemittanceRequestStatus reject() {
             return REJECTED;
         }
+
+        @Override
+        public RemittanceRequestStatus expire() {
+            return EXPIRED;
+        }
     },
     ACCEPTED,
     REJECTED,
@@ -24,5 +29,9 @@ public enum RemittanceRequestStatus {
 
     public RemittanceRequestStatus reject() {
         throw new UnsupportedOperationException("현재 송금 상태에서는 거절할 수 없습니다: " + this);
+    }
+
+    public RemittanceRequestStatus expire() {
+        throw new UnsupportedOperationException("현재 송금 상태에서는 만료할 수 없습니다: " + this);
     }
 }

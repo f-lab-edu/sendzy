@@ -14,12 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RemittanceRequest {
 
+    private static final long EXPIRATION_DAYS = 3;
+
     private Long id;
     private Long senderId;
     private Long receiverId;
     private RemittanceRequestStatus status;
     private Long amount;
     private LocalDateTime createdAt;
+    private transient LocalDateTime expiredAt;
 
     public RemittanceRequest(
         final Long senderId,
@@ -34,8 +37,30 @@ public class RemittanceRequest {
         this.createdAt = LocalDateTime.now();
     }
 
+    /**
+     * 테스트용 생성자입니다.
+     * 접근제어자를 package-private 으로 설정하여 외부에서 직접 생성할 수 없도록 합니다.
+     */
+    RemittanceRequest(
+        final Long senderId,
+        final Long receiverId,
+        final RemittanceRequestStatus status,
+        final Long amount,
+        final LocalDateTime createdAt
+    ) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.status = status;
+        this.amount = amount;
+        this.createdAt = createdAt;
+    }
+
     public boolean isPending() {
         return this.status == RemittanceRequestStatus.PENDING;
+    }
+
+    public boolean isExpired(final LocalDateTime now) {
+        return createdAt.plusDays(EXPIRATION_DAYS).isBefore(now);
     }
 
     public void accept() {
@@ -44,5 +69,16 @@ public class RemittanceRequest {
 
     public void reject() {
         status = this.status.reject();
+    }
+
+    public void expire() {
+        status = this.status.expire();
+    }
+
+    public LocalDateTime getExpiredAt() {
+        if (expiredAt == null) {
+            expiredAt = createdAt.plusDays(EXPIRATION_DAYS);
+        }
+        return expiredAt;
     }
 }

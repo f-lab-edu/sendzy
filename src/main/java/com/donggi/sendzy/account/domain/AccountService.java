@@ -38,7 +38,8 @@ public class AccountService {
     }
 
     @Transactional
-    public void update(final Account account) {
+    public void cancelWithdraw(final Account account, final long amount) {
+        account.cancelWithdraw(amount);
         accountRepository.update(account);
     }
 }
