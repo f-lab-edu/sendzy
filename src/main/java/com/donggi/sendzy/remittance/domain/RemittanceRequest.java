@@ -22,7 +22,7 @@ public class RemittanceRequest {
     private RemittanceRequestStatus status;
     private Long amount;
     private LocalDateTime createdAt;
-    private transient LocalDateTime expiredAt;
+    private LocalDateTime expiredAt;
 
     public RemittanceRequest(
         final Long senderId,
@@ -35,6 +35,7 @@ public class RemittanceRequest {
         this.status = status;
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
+        this.expiredAt = createdAt.plusDays(EXPIRATION_DAYS);
     }
 
     /**
@@ -73,12 +74,5 @@ public class RemittanceRequest {
 
     public void expire() {
         status = this.status.expire();
-    }
-
-    public LocalDateTime getExpiredAt() {
-        if (expiredAt == null) {
-            expiredAt = createdAt.plusDays(EXPIRATION_DAYS);
-        }
-        return expiredAt;
     }
 }
