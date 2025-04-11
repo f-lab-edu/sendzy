@@ -14,7 +14,6 @@ import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.service.RemittanceHistoryService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
-import com.donggi.sendzy.remittance.infrastructure.expiration.ExpirationQueueManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,6 @@ public class RemittanceRequestApplicationService {
     private final RemittanceRequestService remittanceRequestService;
     private final RemittanceHistoryService remittanceHistoryService;
     private final RemittanceStatusHistoryService remittanceStatusHistoryService;
-    private final ExpirationQueueManager expirationQueueManager;
     private final AccountService accountService;
     private final AccountLockingService accountLockingService;
     private final MemberService memberService;
@@ -84,7 +82,6 @@ public class RemittanceRequestApplicationService {
 
     private long recordRemittanceRequest(final Member sender, final Member receiver, final Long amount) {
         final var request = new RemittanceRequest(sender.getId(), receiver.getId(), RemittanceRequestStatus.PENDING, amount);
-        expirationQueueManager.register(request);
         return remittanceRequestService.recordRequestAndGetId(request);
     }
 
