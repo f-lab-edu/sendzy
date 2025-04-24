@@ -19,5 +19,5 @@ public interface RemittanceRequestMapper extends RemittanceRequestRepository, Te
 
     void deleteAll();
 
-    List<RemittanceRequest> findPendingRequests();
+    List<RemittanceRequest> findPendingRequestsBySenderId(final long senderId);
 }
