@@ -29,4 +29,24 @@
     <select id="findPendingRequestsBySenderId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
         SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE sender_id = #{senderId} AND status = 'PENDING'
     </select>
+
+    <select id="findExpiredRequest" resultType="RemittanceRequest">
+        SELECT
+            id,
+            sender_id,
+            receiver_id,
+            amount,
+            status,
+            created_at
+        FROM
+            remittance_request
+        WHERE
+            status = 'PENDING'
+        AND
+            expired_at <= #{now}
+        AND
+            id > #{lastId}
+        LIMIT
+            #{chunkSize}
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.donggi.sendzy.remittance.domain.repository;
 
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,4 +47,15 @@ public interface RemittanceRequestRepository {
      * @return PENDING 상태의 송금 요청 리스트
      */
     List<RemittanceRequest> findPendingRequestsBySenderId(final long senderId);
+
+    /**
+     * 현재 시점 기준으로 만료 대상인 송금 요청을
+     * ID 순으로 페이지 단위 조회합니다.
+     *
+     * @param lastId    직전 청크의 마지막 요청 ID
+     * @param chunkSize 조회할 최대 요청 수
+     * @param now       기준 시각
+     * @return 만료 대상 송금 요청 리스트
+     */
+    List<RemittanceRequest> findExpiredRequest(final long lastId, final int chunkSize, final LocalDateTime now);
 }

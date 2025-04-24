@@ -5,6 +5,7 @@ import com.donggi.sendzy.remittance.domain.repository.RemittanceRequestRepositor
 import com.donggi.sendzy.remittance.domain.repository.TestRemittanceRequestRepository;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface RemittanceRequestMapper extends RemittanceRequestRepository, Te
     void deleteAll();
 
     List<RemittanceRequest> findPendingRequestsBySenderId(final long senderId);
+
+    List<RemittanceRequest> findExpiredRequest(final long lastId, final int chunkSize, final LocalDateTime now);
 }

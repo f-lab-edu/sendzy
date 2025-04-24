@@ -56,3 +56,4 @@ CREATE INDEX idx_remittance_status_history_request_id ON remittance_status_histo
 CREATE INDEX idx_remittance_status_history_sender_id ON remittance_status_history (sender_id);
 CREATE INDEX idx_remittance_status_history_receiver_id ON remittance_status_history (receiver_id);
 CREATE INDEX idx_member_id ON account (member_id);
+CREATE INDEX idx_request_pending_expired_at ON remittance_request (status, expired_at, id);
