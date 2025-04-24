@@ -2,6 +2,7 @@ package com.donggi.sendzy.account.application;
 
 import com.donggi.sendzy.account.domain.AccountService;
 import com.donggi.sendzy.account.dto.AccountBalanceResponse;
+import com.donggi.sendzy.remittance.application.RemittanceExpirationService;
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.repository.RemittanceRequestRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class AccountBalanceQueryService {
 
     private final AccountService accountService;
     private final RemittanceRequestRepository remittanceRequestRepository;
-    private final ExpirationAsyncProcessor expirationAsyncProcessor;
+    private final RemittanceExpirationService remittanceExpirationService;
 
     @Transactional(readOnly = true)
     public AccountBalanceResponse getBalanceWithRequestExpiredCheck(final long memberId) {
@@ -33,7 +34,7 @@ public class AccountBalanceQueryService {
         final var activeRequests = requestsByExpiration.get(false);
 
         // 만료된 요청 갱신
-        expiredRequests.forEach(expirationAsyncProcessor::expire);
+        expiredRequests.forEach(remittanceExpirationService::expireRequest);
 
         return AccountBalanceResponse.from(account, activeRequests);
     }

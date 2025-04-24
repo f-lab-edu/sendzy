@@ -8,6 +8,7 @@ import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ public class RemittanceExpirationService {
      *
      * @param remittanceRequest 만료 처리할 송금 요청
      */
+    @Async("remittanceExpireExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void expireRequest(final RemittanceRequest remittanceRequest) {
         // 송금 요청 상태 변경 → EXPIRED
