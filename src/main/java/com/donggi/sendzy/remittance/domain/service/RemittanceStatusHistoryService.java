@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RemittanceStatusHistoryService {
@@ -22,5 +24,10 @@ public class RemittanceStatusHistoryService {
     @Transactional
     public void recordStatusHistory(final RemittanceStatusHistory remittanceStatusHistory) {
         remittanceStatusHistoryRepository.create(remittanceStatusHistory);
+    }
+
+    @Transactional
+    public void bulkInsert(final List<RemittanceStatusHistory> histories) {
+        remittanceStatusHistoryRepository.bulkInsert(histories);
     }
 }
