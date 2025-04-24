@@ -56,4 +56,9 @@ public class RemittanceRequestService {
     public List<RemittanceRequest> getExpiredRequest(final long lastId, final int chunkSize, final LocalDateTime now) {
         return remittanceRequestRepository.findExpiredRequest(lastId, chunkSize, now);
     }
+
+    @Transactional
+    public void expireAllByIds(final List<Long> ids) {
+        remittanceRequestRepository.expireAllByIds(ids);
+    }
 }

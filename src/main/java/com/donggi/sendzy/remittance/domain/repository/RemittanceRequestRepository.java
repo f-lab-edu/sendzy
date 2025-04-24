@@ -58,4 +58,11 @@ public interface RemittanceRequestRepository {
      * @return 만료 대상 송금 요청 리스트
      */
     List<RemittanceRequest> findExpiredRequest(final long lastId, final int chunkSize, final LocalDateTime now);
+
+    /**
+     * 만료된 송금 요청을 모두 만료 처리합니다.
+     *
+     * @param ids 만료 처리할 송금 요청 ID 리스트
+     */
+    void expireAllByIds(List<Long> ids);
 }

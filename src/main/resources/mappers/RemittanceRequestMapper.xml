@@ -49,4 +49,13 @@
         LIMIT
             #{chunkSize}
     </select>
+    
+    <update id="expireAllByIds" parameterType="java.util.List">
+        UPDATE remittance_request
+        SET status = 'EXPIRED'
+        WHERE id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

@@ -23,4 +23,6 @@ public interface RemittanceRequestMapper extends RemittanceRequestRepository, Te
     List<RemittanceRequest> findPendingRequestsBySenderId(final long senderId);
 
     List<RemittanceRequest> findExpiredRequest(final long lastId, final int chunkSize, final LocalDateTime now);
+
+    void expireAllByIds(List<Long> ids);
 }
