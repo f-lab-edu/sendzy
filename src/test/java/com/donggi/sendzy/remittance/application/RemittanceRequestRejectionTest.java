@@ -1,5 +1,6 @@
 package com.donggi.sendzy.remittance.application;
 
+import com.donggi.sendzy.account.domain.AccountService;
 import com.donggi.sendzy.account.domain.TestAccountRepository;
 import com.donggi.sendzy.member.TestUtils;
 import com.donggi.sendzy.member.application.SignupService;
@@ -50,8 +51,13 @@ public class RemittanceRequestRejectionTest {
     @Autowired
     private RemittanceRequestProcessor remittanceRequestProcessor;
 
+    @Autowired
+    private AccountService accountService;
+
     private Long requestId;
+    private Long senderId;
     private Long receiverId;
+    private RemittanceRequest request;
 
     @BeforeEach
     void setUp() {
@@ -67,16 +73,17 @@ public class RemittanceRequestRejectionTest {
         final var sender = memberService.findByEmail(senderEmail).get();
         final var receiver = memberService.findByEmail(receiverEmail).get();
 
+        senderId = sender.getId();
         receiverId = receiver.getId();
 
-        requestId = remittanceRequestService.recordRequestAndGetId(
-            new RemittanceRequest(
-                sender.getId(),
-                receiverId,
-                RemittanceRequestStatus.PENDING,
-                1000L
-            )
-        );
+        request = new RemittanceRequest(sender.getId(), receiverId, RemittanceRequestStatus.PENDING, 1000L);
+
+        requestId = remittanceRequestService.recordRequestAndGetId(request);
+
+        // 송금자의 계좌에 pending amount 세팅
+        final var senderAccount = accountService.getByMemberId(sender.getId());
+        accountService.deposit(senderAccount, 3000L);
+        accountService.withdraw(senderAccount, 1000L); // pendingAmount 업데이트
     }
 
     @AfterEach
