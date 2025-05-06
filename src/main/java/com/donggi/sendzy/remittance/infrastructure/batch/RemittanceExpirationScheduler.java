@@ -1,5 +1,6 @@
 package com.donggi.sendzy.remittance.infrastructure.batch;
 
+import com.donggi.sendzy.common.lock.NamedLockAcquisitionException;
 import com.donggi.sendzy.common.lock.NamedLockTemplate;
 import com.donggi.sendzy.remittance.application.RemittanceExpirationService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class RemittanceExpirationScheduler {
                     log.info("[배치 잠금 획득 성공] 만료 배치 실행 시작");
                     remittanceExpirationService.expireRequestBatch(CHUNK_SIZE, now);
                     log.info("[만료 배치 완료] 완료 시각: {}", LocalDateTime.now());
-                } catch (Exception e) {
+                } catch (NamedLockAcquisitionException e) {
                     log.error("[만료 배치 실패] 오류 발생: {}", e.getMessage(), e);
                     throw e;
                 }
