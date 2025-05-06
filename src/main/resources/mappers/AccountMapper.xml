@@ -26,4 +26,13 @@
         SET member_id = #{memberId}, balance = #{balance}, pending_amount = #{pendingAmount}
         WHERE id = #{id}
     </update>
+
+    <select id="findAllByMemberIdIn" parameterType="java.util.Set" resultType="com.donggi.sendzy.account.domain.Account">
+        SELECT id, member_id, balance, pending_amount
+        FROM account
+        WHERE member_id IN
+        <foreach item="id" collection="set" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

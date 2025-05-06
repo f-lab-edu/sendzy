@@ -1,5 +1,7 @@
 package com.donggi.sendzy.account.domain;
 
+import com.donggi.sendzy.account.exception.InsufficientPendingAmountException;
+import com.donggi.sendzy.account.exception.InvalidRollbackAmountException;
 import com.donggi.sendzy.account.exception.InvalidWithdrawalException;
 import com.donggi.sendzy.common.utils.Validator;
 import lombok.AccessLevel;
@@ -33,6 +35,14 @@ public class Account {
     }
 
     public void cancelWithdraw(final long amount) {
+        if (amount <= 0) {
+            throw new InvalidRollbackAmountException(amount);
+        }
+
+        if (pendingAmount < amount) {
+            throw new InsufficientPendingAmountException(pendingAmount, amount);
+        }
+
         this.pendingAmount -= amount;
     }
 
