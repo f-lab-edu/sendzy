@@ -2,6 +2,7 @@ package com.donggi.sendzy.remittance.application;
 
 import com.donggi.sendzy.account.application.AccountLockingService;
 import com.donggi.sendzy.account.domain.AccountService;
+import com.donggi.sendzy.account.domain.RollbackTarget;
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
 import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
@@ -12,6 +13,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -44,18 +48,46 @@ public class RemittanceExpirationService {
         rollbackHoldAmount(remittanceRequest.getSenderId(), remittanceRequest.getAmount());
 
         // 히스토리 저장
-        recordStatusHistory(remittanceRequest);
+        remittanceStatusHistoryService.recordStatusHistory(
+            createExpiredStatusHistory(remittanceRequest)
+        );
     }
 
-    private void recordStatusHistory(final RemittanceRequest request) {
-        remittanceStatusHistoryService.recordStatusHistory(
-            new RemittanceStatusHistory(
-                request.getId(),
-                request.getSenderId(),
-                request.getReceiverId(),
-                request.getAmount(),
-                RemittanceRequestStatus.EXPIRED
-            )
+    @Transactional
+    public void expireRequestBatch(final int chunkSize, final LocalDateTime now) {
+        // 만료된 송금 요청 목록 조회
+        final var expiredRequests = remittanceRequestService.getExpiredRequest(chunkSize, now);
+
+        // 롤백 대상 senderId와 롤백 대상 송금 대기 금액 amount 추출
+        final var rollbackTargets = getRollbackTargets(expiredRequests);
+
+        // 송금자 계좌 조회 및 롤백 실행
+        accountService.rollbackHoldAmounts(rollbackTargets);
+
+        // 송금 요청 만료 처리
+        expiredRequests.forEach(RemittanceRequest::expire);
+        remittanceRequestService.bulkUpdate(expiredRequests);
+
+        // 만료된 송금 요청 상태 기록
+        List<RemittanceStatusHistory> histories = expiredRequests.stream()
+            .map(this::createExpiredStatusHistory)
+            .toList();
+        remittanceStatusHistoryService.bulkInsert(histories);
+    }
+
+    private List<RollbackTarget> getRollbackTargets(final List<RemittanceRequest> expiredRequests) {
+        return expiredRequests.stream()
+            .map(r -> new RollbackTarget(r.getSenderId(), r.getAmount()))
+            .toList();
+    }
+
+    private RemittanceStatusHistory createExpiredStatusHistory(final RemittanceRequest request) {
+        return new RemittanceStatusHistory(
+            request.getId(),
+            request.getSenderId(),
+            request.getReceiverId(),
+            request.getAmount(),
+            RemittanceRequestStatus.EXPIRED
         );
     }
 

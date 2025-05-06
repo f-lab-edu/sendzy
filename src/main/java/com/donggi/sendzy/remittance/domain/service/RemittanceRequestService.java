@@ -53,12 +53,12 @@ public class RemittanceRequestService {
     }
 
     @Transactional(readOnly = true)
-    public List<RemittanceRequest> getExpiredRequest(final long lastId, final int chunkSize, final LocalDateTime now) {
-        return remittanceRequestRepository.findExpiredRequest(lastId, chunkSize, now);
+    public List<RemittanceRequest> getExpiredRequest(final int chunkSize, final LocalDateTime now) {
+        return remittanceRequestRepository.findExpiredRequest(chunkSize, now);
     }
 
     @Transactional
-    public void expireAllByIds(final List<Long> ids) {
-        remittanceRequestRepository.expireAllByIds(ids);
+    public void bulkUpdate(final List<RemittanceRequest> remittanceRequests) {
+        remittanceRequestRepository.bulkUpdate(remittanceRequests);
     }
 }

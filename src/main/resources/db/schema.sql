@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS remittance_request (
   `status` varchar(50) NOT NULL, -- PENDING, ACCEPTED, EXPIRED, CANCELLED, ...
   `amount` bigint NOT NULL,
   `created_at` datetime NOT NULL,
-  `expired_at` datetime NOT NULL,
+  `expired_at` datetime NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS remittance_status_history (
