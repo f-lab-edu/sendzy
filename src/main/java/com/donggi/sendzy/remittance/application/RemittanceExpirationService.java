@@ -4,7 +4,6 @@ import com.donggi.sendzy.account.application.AccountLockingService;
 import com.donggi.sendzy.account.domain.AccountService;
 import com.donggi.sendzy.account.domain.RollbackTarget;
 import com.donggi.sendzy.remittance.domain.RemittanceRequest;
-import com.donggi.sendzy.remittance.domain.RemittanceRequestStatus;
 import com.donggi.sendzy.remittance.domain.RemittanceStatusHistory;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
@@ -51,7 +50,12 @@ public class RemittanceExpirationService {
 
         // 히스토리 저장
         remittanceStatusHistoryService.recordStatusHistory(
-            createExpiredStatusHistory(remittanceRequest)
+            RemittanceStatusHistory.forExpiration(
+                remittanceRequest.getId(),
+                remittanceRequest.getSenderId(),
+                remittanceRequest.getReceiverId(),
+                remittanceRequest.getAmount()
+            )
         );
     }
 
@@ -91,7 +95,12 @@ public class RemittanceExpirationService {
 
     private void recordStatusHistory(final List<RemittanceRequest> requests) {
         final var histories = requests.stream()
-            .map(this::createExpiredStatusHistory)
+            .map(r -> RemittanceStatusHistory.forExpiration(
+                r.getId(),
+                r.getSenderId(),
+                r.getReceiverId(),
+                r.getAmount()
+            ))
             .toList();
         remittanceStatusHistoryService.bulkInsert(histories);
     }
@@ -100,16 +109,6 @@ public class RemittanceExpirationService {
         return expiredRequests.stream()
             .map(r -> new RollbackTarget(r.getSenderId(), r.getAmount()))
             .toList();
-    }
-
-    private RemittanceStatusHistory createExpiredStatusHistory(final RemittanceRequest request) {
-        return new RemittanceStatusHistory(
-            request.getId(),
-            request.getSenderId(),
-            request.getReceiverId(),
-            request.getAmount(),
-            RemittanceRequestStatus.EXPIRED
-        );
     }
 
     private void rollbackHoldAmount(final long senderId, final long amount) {

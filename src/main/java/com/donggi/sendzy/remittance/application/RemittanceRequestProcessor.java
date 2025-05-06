@@ -45,7 +45,14 @@ public class RemittanceRequestProcessor {
         remittanceRequestService.accept(remittanceRequest);
 
         // 상태 변경 히스토리 저장
-        recordStatusHistory(remittanceRequest, RemittanceRequestStatus.ACCEPTED);
+        remittanceStatusHistoryService.recordStatusHistory(
+            RemittanceStatusHistory.forAcceptance(
+                remittanceRequest.getId(),
+                remittanceRequest.getSenderId(),
+                remittanceRequest.getReceiverId(),
+                remittanceRequest.getAmount()
+            )
+        );
     }
 
     @Transactional
@@ -63,7 +70,14 @@ public class RemittanceRequestProcessor {
         remittanceRequestService.reject(remittanceRequest);
 
         // 상태 변경 히스토리 저장
-        recordStatusHistory(remittanceRequest, RemittanceRequestStatus.REJECTED);
+        remittanceStatusHistoryService.recordStatusHistory(
+            RemittanceStatusHistory.forRejection(
+                remittanceRequest.getId(),
+                remittanceRequest.getSenderId(),
+                remittanceRequest.getReceiverId(),
+                remittanceRequest.getAmount()
+            )
+        );
     }
 
     private void rollbackHoldAmount(final long senderId, final long amount) {
@@ -94,17 +108,5 @@ public class RemittanceRequestProcessor {
             remittanceExpirationService.expireRequest(remittanceRequest);
             throw new ExpiredRemittanceRequestException();
         }
-    }
-
-    private void recordStatusHistory(final RemittanceRequest request, final RemittanceRequestStatus status) {
-        remittanceStatusHistoryService.recordStatusHistory(
-            new RemittanceStatusHistory(
-                request.getId(),
-                request.getSenderId(),
-                request.getReceiverId(),
-                request.getAmount(),
-                status
-            )
-        );
     }
 }

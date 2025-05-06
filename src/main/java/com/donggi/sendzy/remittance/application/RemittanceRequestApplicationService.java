@@ -59,7 +59,14 @@ public class RemittanceRequestApplicationService {
         final var requestId = recordRemittanceRequest(sender, receiver, amount);
 
         // 송금 상태 내역 저장
-        recordRemittanceStatusHistory(sender, receiver, amount, requestId);
+        remittanceStatusHistoryService.recordStatusHistory(
+            RemittanceStatusHistory.forPending(
+                requestId,
+                sender.getId(),
+                receiver.getId(),
+                amount
+            )
+        );
 
         // 송금 내역에 송금 ID 업데이트
         remittanceHistoryService.updateRequestId(historyId, requestId);
@@ -71,13 +78,14 @@ public class RemittanceRequestApplicationService {
     }
 
     private void recordRemittanceStatusHistory(final Member sender, final Member receiver, final Long amount, final Long requestId) {
-        remittanceStatusHistoryService.recordStatusHistory(new RemittanceStatusHistory(
-            requestId,
-            sender.getId(),
-            receiver.getId(),
-            amount,
-            RemittanceRequestStatus.PENDING
-        ));
+        remittanceStatusHistoryService.recordStatusHistory(
+            RemittanceStatusHistory.forPending(
+                requestId,
+                sender.getId(),
+                receiver.getId(),
+                amount
+            )
+        );
     }
 
     private long recordRemittanceRequest(final Member sender, final Member receiver, final Long amount) {

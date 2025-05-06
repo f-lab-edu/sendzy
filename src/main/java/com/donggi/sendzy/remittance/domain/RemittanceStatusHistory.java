@@ -24,20 +24,61 @@ public class RemittanceStatusHistory {
     private LocalDateTime expiredAt;
     private LocalDateTime acceptedAt;
 
-    public RemittanceStatusHistory(
+    // 공통 초기화 메서드
+    private static RemittanceStatusHistory base(
         final Long requestId,
         final Long senderId,
         final Long receiverId,
         final Long amount,
         final RemittanceRequestStatus status
     ) {
-        this.requestId = requestId;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.amount = amount;
-        this.status = status;
-        this.createdAt = LocalDateTime.now();
-        this.expiredAt = null;
-        this.acceptedAt = null;
+        final RemittanceStatusHistory history = new RemittanceStatusHistory();
+        history.requestId = requestId;
+        history.senderId = senderId;
+        history.receiverId = receiverId;
+        history.amount = amount;
+        history.status = status;
+        history.createdAt = LocalDateTime.now();
+        return history;
+    }
+
+    public static RemittanceStatusHistory forExpiration(
+        final Long requestId,
+        final Long senderId,
+        final Long receiverId,
+        final Long amount
+    ) {
+        final RemittanceStatusHistory history = base(requestId, senderId, receiverId, amount, RemittanceRequestStatus.EXPIRED);
+        history.expiredAt = LocalDateTime.now();
+        return history;
+    }
+
+    public static RemittanceStatusHistory forAcceptance(
+        final Long requestId,
+        final Long senderId,
+        final Long receiverId,
+        final Long amount
+    ) {
+        final RemittanceStatusHistory history = base(requestId, senderId, receiverId, amount, RemittanceRequestStatus.ACCEPTED);
+        history.acceptedAt = LocalDateTime.now();
+        return history;
+    }
+
+    public static RemittanceStatusHistory forRejection(
+        final Long requestId,
+        final Long senderId,
+        final Long receiverId,
+        final Long amount
+    ) {
+        return base(requestId, senderId, receiverId, amount, RemittanceRequestStatus.REJECTED);
+    }
+
+    public static RemittanceStatusHistory forPending(
+        final Long requestId,
+        final Long senderId,
+        final Long receiverId,
+        final Long amount
+    ) {
+        return base(requestId, senderId, receiverId, amount, RemittanceRequestStatus.PENDING);
     }
 }
