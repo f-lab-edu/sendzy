@@ -40,9 +40,8 @@ public class RemittanceRequest {
 
     /**
      * 테스트용 생성자입니다.
-     * 접근제어자를 package-private 으로 설정하여 외부에서 직접 생성할 수 없도록 합니다.
      */
-    RemittanceRequest(
+    public RemittanceRequest(
         final Long senderId,
         final Long receiverId,
         final RemittanceRequestStatus status,
@@ -54,6 +53,7 @@ public class RemittanceRequest {
         this.status = status;
         this.amount = amount;
         this.createdAt = createdAt;
+        this.expiredAt = createdAt.plusDays(EXPIRATION_DAYS);
     }
 
     public boolean isPending() {

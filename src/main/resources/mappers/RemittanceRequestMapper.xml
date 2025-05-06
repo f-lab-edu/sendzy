@@ -58,8 +58,6 @@
             status = 'PENDING'
           AND
             expired_at <= #{now}
-          AND
-            id > #{lastId}
         LIMIT
             #{chunkSize}
         ]]>
