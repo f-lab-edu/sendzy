@@ -14,13 +14,13 @@ import com.donggi.sendzy.remittance.domain.repository.TestRemittanceRequestRepos
 import com.donggi.sendzy.remittance.domain.service.RemittanceHistoryService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceRequestService;
 import com.donggi.sendzy.remittance.domain.service.RemittanceStatusHistoryService;
+import com.donggi.sendzy.support.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 class RemittanceRequestApplicationServiceTest {
 
     @Autowired

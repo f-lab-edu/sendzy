@@ -20,7 +20,7 @@ public class MySqlTestContainerInitializer implements ApplicationContextInitiali
     @Override
     public void initialize(final ConfigurableApplicationContext context) {
         TestPropertyValues.of(
-            "spring.datasource.url="      + MYSQL.getJdbcUrl(),
+            "spring.datasource.url=" + MYSQL.getJdbcUrl(),
             "spring.datasource.username=" + MYSQL.getUsername(),
             "spring.datasource.password=" + MYSQL.getPassword(),
             "spring.datasource.driver-class-name=" + MYSQL.getDriverClassName()
