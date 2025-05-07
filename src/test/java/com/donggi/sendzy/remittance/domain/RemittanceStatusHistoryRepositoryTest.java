@@ -25,13 +25,7 @@ public class RemittanceStatusHistoryRepositoryTest {
         final var receiverId = 1L;
         final var amount = 100L;
 
-        final var expected = new RemittanceStatusHistory(
-            requestId,
-            senderId,
-            receiverId,
-            amount,
-            RemittanceRequestStatus.PENDING
-        );
+        final var expected = RemittanceStatusHistory.forPending(requestId, senderId, receiverId, amount);
 
         // when
         final var actual = remittanceStatusHistoryRepository.create(expected);

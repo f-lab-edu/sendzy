@@ -4,6 +4,7 @@ import com.donggi.sendzy.member.domain.Member;
 import com.donggi.sendzy.member.domain.MemberRepository;
 import com.donggi.sendzy.member.domain.TestMemberRepository;
 import com.donggi.sendzy.member.dto.SignupRequest;
+import com.donggi.sendzy.support.IntegrationTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
@@ -20,7 +20,7 @@ import static io.restassured.RestAssured.given;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 public class SignupIntegrationTest {
 
     @LocalServerPort

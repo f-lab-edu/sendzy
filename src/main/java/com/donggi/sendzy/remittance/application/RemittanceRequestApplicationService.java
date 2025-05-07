@@ -22,11 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RemittanceRequestApplicationService {
 
+    private final RemittanceRequestService remittanceRequestService;
+    private final RemittanceHistoryService remittanceHistoryService;
+    private final RemittanceStatusHistoryService remittanceStatusHistoryService;
     private final AccountService accountService;
     private final AccountLockingService accountLockingService;
-    private final RemittanceHistoryService remittanceHistoryService;
-    private final RemittanceRequestService remittanceRequestService;
-    private final RemittanceStatusHistoryService remittanceStatusHistoryService;
     private final MemberService memberService;
 
     /**
@@ -59,7 +59,14 @@ public class RemittanceRequestApplicationService {
         final var requestId = recordRemittanceRequest(sender, receiver, amount);
 
         // 송금 상태 내역 저장
-        recordRemittanceStatusHistory(sender, receiver, amount, requestId);
+        remittanceStatusHistoryService.recordStatusHistory(
+            RemittanceStatusHistory.forPending(
+                requestId,
+                sender.getId(),
+                receiver.getId(),
+                amount
+            )
+        );
 
         // 송금 내역에 송금 ID 업데이트
         remittanceHistoryService.updateRequestId(historyId, requestId);
@@ -71,27 +78,22 @@ public class RemittanceRequestApplicationService {
     }
 
     private void recordRemittanceStatusHistory(final Member sender, final Member receiver, final Long amount, final Long requestId) {
-        remittanceStatusHistoryService.recordStatusHistory(new RemittanceStatusHistory(
-            requestId,
-            sender.getId(),
-            receiver.getId(),
-            amount,
-            RemittanceRequestStatus.PENDING
-        ));
-    }
-
-    private Long recordRemittanceRequest(final Member sender, final Member receiver, final Long amount) {
-        return remittanceRequestService.recordRequestAndGetId(
-            new RemittanceRequest(
+        remittanceStatusHistoryService.recordStatusHistory(
+            RemittanceStatusHistory.forPending(
+                requestId,
                 sender.getId(),
                 receiver.getId(),
-                RemittanceRequestStatus.PENDING,
                 amount
             )
         );
     }
 
-    private Long recordRemittanceHistory(final Member sender, final Account senderAccount, final Long amount) {
+    private long recordRemittanceRequest(final Member sender, final Member receiver, final Long amount) {
+        final var request = new RemittanceRequest(sender.getId(), receiver.getId(), RemittanceRequestStatus.PENDING, amount);
+        return remittanceRequestService.recordRequestAndGetId(request);
+    }
+
+    private long recordRemittanceHistory(final Member sender, final Account senderAccount, final Long amount) {
         return remittanceHistoryService.recordHistoryAndGetId(
             new RemittanceHistory(
                 null,

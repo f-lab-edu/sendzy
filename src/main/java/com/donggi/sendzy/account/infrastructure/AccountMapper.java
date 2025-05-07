@@ -5,7 +5,9 @@ import com.donggi.sendzy.account.domain.AccountRepository;
 import com.donggi.sendzy.account.domain.TestAccountRepository;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Mapper
 public interface AccountMapper extends AccountRepository, TestAccountRepository {
@@ -18,4 +20,6 @@ public interface AccountMapper extends AccountRepository, TestAccountRepository 
     Optional<Account> findByMemberId(final long memberId);
 
     Optional<Account> findByMemberIdForUpdate(final long memberId);
+
+    List<Account> findAllByMemberIdIn(final Set<Long> senderIds);
 }

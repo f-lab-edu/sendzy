@@ -4,8 +4,8 @@
 <mapper namespace="com.donggi.sendzy.remittance.infrastructure.RemittanceRequestMapper">
 
     <insert id="create" parameterType="com.donggi.sendzy.remittance.domain.RemittanceRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO remittance_request (sender_id, receiver_id, status, amount, created_at)
-        VALUES (#{senderId}, #{receiverId}, #{status}, #{amount}, #{createdAt})
+        INSERT INTO remittance_request (sender_id, receiver_id, status, amount, created_at, expired_at)
+        VALUES (#{senderId}, #{receiverId}, #{status}, #{amount}, #{createdAt}, #{expiredAt})
     </insert>
 
     <delete id="deleteAll">
@@ -18,11 +18,48 @@
         WHERE id = #{id}
     </update>
 
+    <update id="bulkUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="request" separator=";">
+            UPDATE remittance_request
+            SET
+            sender_id = #{request.senderId},
+            receiver_id = #{request.receiverId},
+            status = #{request.status},
+            amount = #{request.amount}
+            WHERE id = #{request.id}
+        </foreach>
+    </update>
+
     <select id="findById" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
         SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE id = #{id}
     </select>
 
     <select id="findByIdForUpdate" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
         SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE id = #{id} FOR UPDATE
+    </select>
+
+    <select id="findPendingRequestsBySenderId" parameterType="long" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        SELECT id, sender_id, receiver_id, status, amount, created_at FROM remittance_request WHERE sender_id = #{senderId} AND status = 'PENDING'
+    </select>
+
+    <select id="findExpiredRequest" resultType="com.donggi.sendzy.remittance.domain.RemittanceRequest">
+        <![CDATA[
+        SELECT
+            id,
+            sender_id,
+            receiver_id,
+            amount,
+            status,
+            created_at,
+            expired_at
+        FROM
+            remittance_request
+        WHERE
+            status = 'PENDING'
+          AND
+            expired_at <= #{now}
+        LIMIT
+            #{chunkSize}
+        ]]>
     </select>
 </mapper>

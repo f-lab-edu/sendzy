@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RemittanceRequestService {
@@ -31,6 +34,12 @@ public class RemittanceRequestService {
         remittanceRequestRepository.update(remittanceRequest);
     }
 
+    @Transactional
+    public void expire(final RemittanceRequest remittanceRequest) {
+        remittanceRequest.expire();
+        remittanceRequestRepository.update(remittanceRequest);
+    }
+
     @Transactional(readOnly = true)
     public RemittanceRequest getById(final long requestId) {
         return remittanceRequestRepository.findById(requestId)
@@ -41,5 +50,15 @@ public class RemittanceRequestService {
     public RemittanceRequest getByIdForUpdate(final long requestId) {
         return remittanceRequestRepository.findByIdForUpdate(requestId)
             .orElseThrow(RemittanceRequestNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RemittanceRequest> getExpiredRequest(final int chunkSize, final LocalDateTime now) {
+        return remittanceRequestRepository.findExpiredRequest(chunkSize, now);
+    }
+
+    @Transactional
+    public void bulkUpdate(final List<RemittanceRequest> remittanceRequests) {
+        remittanceRequestRepository.bulkUpdate(remittanceRequests);
     }
 }

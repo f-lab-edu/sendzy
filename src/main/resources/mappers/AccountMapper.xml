@@ -26,4 +26,25 @@
         SET member_id = #{memberId}, balance = #{balance}, pending_amount = #{pendingAmount}
         WHERE id = #{id}
     </update>
+
+    <update id="bulkUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="account" separator=";">
+            UPDATE account
+            SET
+            member_id = #{account.memberId},
+            balance = #{account.balance},
+            pending_amount = #{account.pendingAmount}
+            WHERE
+            member_id = #{account.memberId}
+        </foreach>
+    </update>
+
+    <select id="findAllByMemberIdIn" parameterType="java.util.Set" resultType="com.donggi.sendzy.account.domain.Account">
+        SELECT id, member_id, balance, pending_amount
+        FROM account
+        WHERE member_id IN
+        <foreach item="id" collection="collection" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

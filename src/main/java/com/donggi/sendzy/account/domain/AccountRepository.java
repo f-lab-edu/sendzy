@@ -1,6 +1,8 @@
 package com.donggi.sendzy.account.domain;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AccountRepository {
 
@@ -30,4 +32,19 @@ public interface AccountRepository {
      * @param account 업데이트할 계좌
      */
     void update(final Account account);
+
+    /**
+     * 계좌 목록을 일괄 업데이트합니다.
+     *
+     * @param accounts 업데이트할 계좌 목록
+     */
+    void bulkUpdate(final List<Account> accounts);
+
+    /**
+     * 회원 ID 목록에 해당하는 계좌 목록을 조회합니다.
+     *
+     * @param senderIds 회원 ID 목록
+     * @return 조회된 계좌 목록
+     */
+    List<Account> findAllByMemberIdIn(final Set<Long> senderIds);
 }

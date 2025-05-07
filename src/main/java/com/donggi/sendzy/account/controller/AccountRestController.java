@@ -1,6 +1,6 @@
 package com.donggi.sendzy.account.controller;
 
-import com.donggi.sendzy.account.domain.AccountService;
+import com.donggi.sendzy.account.application.AccountBalanceQueryService;
 import com.donggi.sendzy.account.dto.AccountBalanceResponse;
 import com.donggi.sendzy.common.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AccountRestController {
 
-    private final AccountService accountService;
+    private final AccountBalanceQueryService accountBalanceQueryService;
 
     @GetMapping("/balance")
-    public AccountBalanceResponse getBalance(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        final var balance = accountService.getByMemberId(userDetails.getMemberId()).getBalance();
-        return new AccountBalanceResponse(balance);
+    public AccountBalanceResponse getBalance(@AuthenticationPrincipal final CustomUserDetails userDetails) {
+        return accountBalanceQueryService.getBalanceWithRequestExpiredCheck(userDetails.getMemberId());
     }
 }
